@@ -1,27 +1,30 @@
 import React from 'react';
+import * as ReactDOM from "react-dom/client";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Link,
+  Routes,
+  Route,
+  useNavigate,
+  BrowserRouter,
+} from "react-router-dom";
 import './App.css';
 import Login from "./Login";
-
+import ForgotPassword from './ForgotPassword';
+import SignUp from './SignUp';
+import Dashboard from './Dashboard';
 function App() {
-  return (<Login />)
+  return  (<div className="App">
+    <BrowserRouter>
+    <Routes>
+      <Route path="/" element ={<Login />} />
+      <Route path="/Login" element ={<Login />} />
+      <Route path="/ForgotPassword" element = {<ForgotPassword />} />
+      <Route path="/SignUp" element = {<SignUp/>} />
+      <Route path="/Dashboard" element = {<Dashboard/>} />
+    </Routes>
+    </BrowserRouter>
+  </div>);
 }
 export default App;
-
- {/*} return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"  
-          target="_blank"npn
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
- ); */}
