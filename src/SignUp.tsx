@@ -6,8 +6,8 @@ import ForgotPassword from './ForgotPassword';
 import { useNavigate } from "react-router-dom";
 function SignUp() {
     return (
-        <div className="App">
-            <Box sx={{width: '75%', bgcolor:"#FBE9E9", alignItems: 'center', justifyContent: 'center'}}> 
+        <div className="App" style={{display: 'flex',  justifyContent:'center', alignItems:'center'}}>
+            <Box sx={{width: '62.5%', bgcolor:"#FBE9E9", alignItems: 'center', justifyContent: 'center', opacity: '50%'}}> 
                 <h1>Sign Up</h1>
                 <Stack spacing = {2}>
                     <div><TextField id="username" label="Create an username" variant="filled"/></div>
