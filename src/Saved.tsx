@@ -23,7 +23,7 @@ function Saved() {
             //minWidth: "25%",
             maxWidth: "20%",
             boxShadow: 2,
-            onMouseOver: {color: "orange"} 
+            onMouseDown: {color: "orange"} 
           }}
         >
           <h3>Title</h3>

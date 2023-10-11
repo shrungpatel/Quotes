@@ -22,6 +22,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
+  box-shadow: 28px 28px 50px 0 rgba(5,15,31,0.16), -23px -23px 45px 0 #FFFFFF;
 }
 
 .App-link {
