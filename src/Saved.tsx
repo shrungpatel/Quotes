@@ -26,19 +26,19 @@ function Saved() {
             onMouseDown: {color: "orange"} 
           }}
         >
-          <h3>Title</h3>
-          <p>"This is an example of a quote that would be placed in a card.</p>
+          <h4>This is the quote that you would read on the card. This is the second sentence of the quote.</h4>
+          <p>Author Name</p>
         </CardContent>
       );
     }
     return cards;
   };
   return (
-    <div>
+    <div className="App">
       <Box sx={{ flexGrow: 1 }}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton
+             <IconButton
               size="large"
               edge="start"
               color="inherit"

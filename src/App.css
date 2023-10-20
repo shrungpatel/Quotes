@@ -41,3 +41,16 @@
 .App-Box {
   color: #000000
 }
+
+Button:hover {
+  color: pink;
+  width: 20%;
+}
+
+
+.App-Card {
+  background-color: #ffcccc;
+  width: 200px;
+  height: 200px;
+  rotate: 180deg;
+}
