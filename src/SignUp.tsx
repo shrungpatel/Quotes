@@ -8,8 +8,8 @@ import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from '
 
 function SignUp() {
     const auth = getAuth();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     async function SignUp_Home(email: string, password: string) {
         try {
             createUserWithEmailAndPassword(auth, email, password);

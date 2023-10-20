@@ -34,18 +34,26 @@ function Login() {
       console.log("No such document!");
     }
   };
-  getLogin();
+  // getLogin();
 
 
   const auth = getAuth();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     async function SignIn_Home(email: string, password: string) {
         try {
-            signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log("Success");
             navigate("/Dashboard");
-        } catch (error) {
+        } catch (error: any) {
+          if(error.code === "auth/user-not-found") {
+            alert("User not found");
+            console.log("Invalid user");
+          }
+          if(error.code === "auth/invalid-email") {
+            alert("Email not found");
+            console.log("Invalid email");
+          }
            console.log("Uh-oh");
         }
     }
@@ -64,7 +72,7 @@ function Login() {
               <TextField id="email" label="Email" variant="filled" value={email} onChange={(e) => setEmail(e.target.value)}/>
             </div>
             <div>
-              <TextField id="password" label="Password" variant="filled" value={password} onChange={(e) => setPassword(e.target.value)}/>
+              <TextField id="password" label="Password" variant="filled" value={password} type="password" onChange={(e) => setPassword(e.target.value)}/>
             </div>
           </Stack>
         </Container>
