@@ -49,7 +49,7 @@ function Saved() {
           </Toolbar>
         </AppBar>
       </Box>
-      <Card sx={{ display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center" }}>{makeCard()}</Card>{" "}
+      <Card sx={{ display: "flex", flexWrap: "wrap", alignContent: "center", justifyContent: "center" }}>{makeCard()}</Card>
     </div>
   );
 }
