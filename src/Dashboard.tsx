@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent } from "@mui/material";
-
+import "./App.css";
 function Dashboard() {
   const [cards, setCards] = useState<JSX.Element[]>([]);
 
@@ -16,20 +16,14 @@ function Dashboard() {
         let newCards = [];
         for (let a = 0; a < 50; a++) {
           newCards.push(
+            <>
             <CardContent
-              sx={{
-                border: 1,
-                borderRadius: "16px",
-                m: 2,
-                maxWidth: "20%",
-                boxShadow: 2,
-                onMouseDown: { color: "orange" },
-              }}
+              className="App-Card"
               key={a}
             >
               <h4>{response.data.results[a].content}</h4>
               <p>{response.data.results[a].author}</p>
-            </CardContent>
+            </CardContent></>
           );
         }
         setCards(newCards);
@@ -41,12 +35,12 @@ function Dashboard() {
 
   return (
     <div>
-      <Card
+      <Card className="App-newBackground"
         sx={{
           display: "flex",
           flexWrap: "wrap",
           alignContent: "center",
-          justifyContent: "center",
+          justifyContent: "center"
         }}
       >
         {cards}

@@ -53,7 +53,11 @@ function Login() {
             alert("Email not found");
             console.log("Invalid email");
           }
-           console.log("Uh-oh");
+          if(error.code === "auth/invalid-login-credentials") {
+            alert("Invalid login credentials");
+            console.log("Invalid email");
+          }
+           console.log(error.code);
         }
     }
     const SignIn_Btn_Click = () => {

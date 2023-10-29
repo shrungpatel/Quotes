@@ -1,9 +1,12 @@
 .App {
+  background: url(https://media.istockphoto.com/id/931318336/photo/holographic-foil-blurred-abstract-background-for-trendy-design.webp?b=1&s=170667a&w=0&k=20&c=W9-CaRSZSySq_W7d0RShegjpwpr3TsK6zyzfD3Znd48=) center / cover no-repeat fixed;
   text-align: center;
 }
-
+.App-newBackground {
+  background: url(https://media.istockphoto.com/id/931318336/photo/holographic-foil-blurred-abstract-background-for-trendy-design.webp?b=1&s=170667a&w=0&k=20&c=W9-CaRSZSySq_W7d0RShegjpwpr3TsK6zyzfD3Znd48=) center / cover no-repeat fixed;
+}
 .App-header {
-  background-color: #ffcccc;
+  background: url(https://media.istockphoto.com/id/931318336/photo/holographic-foil-blurred-abstract-background-for-trendy-design.webp?b=1&s=170667a&w=0&k=20&c=W9-CaRSZSySq_W7d0RShegjpwpr3TsK6zyzfD3Znd48=) center / cover no-repeat fixed;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,17 +20,16 @@
 .App-box {
   min-width: 40%;
   min-height: 50%;
-  background: linear-gradient(
+  background: (linear-gradient(
     to right,
     #ffcccc,
-    #ffcccf
-);
+    #ffcccf,
+  ), 1.0);
   position: absolute;
   transform: translate(-50%,-50%);
   top: 50%;
   left: 50%;
   border-radius: 50px;
-  backdrop-filter: blur(50px);
   border: 2px solid rgba(255,255,255,0.1);
   box-shadow: 0 0 100px #ffccff;
   padding: 50px 35px;
@@ -37,7 +39,7 @@
   color: #61dafb;
 }
 
-Button:hover {
+.App-button:hover {
   background-color: #ffcccc;
   color: pink;
   width: 20%;
@@ -50,9 +52,21 @@ Button:hover {
   );
 }
 
-.App-Card {
+.App-Card { 
   background-color: #ffcccc;
-  width: 200px;
-  height: 200px;
-  rotate: 180deg;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+
+  backdrop-filter: blur(15px);
+  
+  border: #ffccff solid 2.5px;
+  /*border-bottom-width: 5px;
+  border-right-width: 5px; */
+  border-radius: 20px;
+  margin: 2px;
+  margin-right: 10px;
+  max-width: 20%;
+  min-width: 15%;
+  box-shadow: 2px;
 }

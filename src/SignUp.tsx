@@ -15,7 +15,10 @@ function SignUp() {
         try {
             createUserWithEmailAndPassword(auth, email, password);
             navigate("/Login");
-        } catch (error) {
+        } catch (error: any) {
+            if(error.code == "auth/email-already-exists") {
+                alert("This email is already in use.")
+            }
            console.log("Uh-oh");
         }
     }
@@ -30,7 +33,7 @@ function SignUp() {
                 <Stack spacing = {2}>
                     <div><TextField id="username" label="Create an username" variant="filled"/></div>
                     <div><TextField id="email_field" label="Enter your email" variant="filled" value={email} onChange={(e) => setEmail(e.target.value)}/></div>
-                    <div><TextField id="password_field" label="Enter your password" variant="filled" value={password} onChange={(e) => setPassword(e.target.value)}/></div>
+                    <div><TextField id="password_field" label="Enter your password" variant="filled" type="password" value={password} onChange={(e) => setPassword(e.target.value)}/></div>
                 </Stack>
                 <br></br>
                 <Button onClick={SignUp_Btn_Click} variant="contained">Sign up!</Button>
