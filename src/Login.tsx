@@ -19,7 +19,6 @@ function Login() {
   };
   const signin = () => {
     navigate("/Dashboard");
-     <div><Alert severity="success">Welcome back!</Alert></div>
   };
 
 
@@ -65,21 +64,25 @@ function Login() {
   return (
     <div className="App">
       <header className="App-header">
-        <Container maxWidth="sm">
-          <h1>Login</h1>
-          <Stack spacing={2}>
-            <div>
-              <TextField id="email" label="Email" variant="filled" value={email} onChange={(e) => setEmail(e.target.value)}/>
-            </div>
-            <div>
-              <TextField id="password" label="Password" variant="filled" value={password} type="password" onChange={(e) => setPassword(e.target.value)}/>
-            </div>
-          </Stack>
+        <Container className="App-box">
+          <Container maxWidth="sm">
+            <h1>Login</h1>
+            <Stack spacing={2}>
+              <div>
+                <TextField id="email" label="Email" variant="filled" value={email} onChange={(e) => setEmail(e.target.value)}/>
+              </div>
+              <div>
+                <TextField id="password" label="Password" variant="filled" value={password} type="password" onChange={(e) => setPassword(e.target.value)}/>
+              </div>
+            </Stack>
+          </Container>
+          <div>
+          <Link onClick={forgotClick}>Forgot Password</Link>
+          <br></br>
+          <Link onClick={signup}>Create an account</Link>
+          </div>
+          <Button onClick={SignIn_Btn_Click} variant="contained" className="App-button">Sign in</Button>
         </Container>
-        <Link onClick={forgotClick}>Forgot Password</Link>
-        <Link onClick={signup}>Create an account</Link>
-        <Button onClick={SignIn_Btn_Click} variant="contained">Sign in</Button>
-        <Button onClick={signup} variant="contained">New sign in</Button>
       </header>
     </div>
   );
