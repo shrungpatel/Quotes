@@ -23,9 +23,8 @@ import {
   BottomNavigationAction,
 } from "@mui/material";
 import { ref } from "firebase/storage";
-//{hideHeader} put header in a seperate file
+//put header in a seperate file and them import that
 function App() {
-  /*
   const [value, setValue] = React.useState(0);
   const location = useLocation();
   const hideHeader =
@@ -37,7 +36,7 @@ function App() {
         <Paper className="App-menu-bar" elevation={10}>
           <BottomNavigation
             showLabels
-            value={value}
+            value={value}          
             onChange={(event, newValue) => {
               setValue(newValue);
             }}
@@ -49,19 +48,18 @@ function App() {
         </Paper>
       </Box>
     );
-            */
+
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/Login" element={<Login />} />
-          <Route path="/ForgotPassword" element={<ForgotPassword />} />
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Saved" element={<Saved />} />
-        </Routes>
-      </BrowserRouter>
+      {hideHeader}
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/Login" element={<Login />} />
+        <Route path="/ForgotPassword" element={<ForgotPassword />} />
+        <Route path="/SignUp" element={<SignUp />} />
+        <Route path="/Dashboard" element={<Dashboard />} />
+        <Route path="/Saved" element={<Saved />} />
+      </Routes>
     </div>
   );
 }

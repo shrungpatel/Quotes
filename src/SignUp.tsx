@@ -24,7 +24,7 @@ function SignUp() {
                 uid: user.uid,
                 email: email,
                 password: password,
-                quotesID: null
+                quotesID: []
             }
         
             console.log(data.uid);
