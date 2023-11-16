@@ -8,6 +8,7 @@ import {
   Route,
   useNavigate,
   BrowserRouter,
+  useLocation,
 } from "react-router-dom";
 import "./App.css";
 import Login from "./Login";
@@ -15,7 +16,40 @@ import ForgotPassword from "./ForgotPassword";
 import SignUp from "./SignUp";
 import Dashboard from "./Dashboard";
 import Saved from "./Saved";
+import {
+  Box,
+  Paper,
+  BottomNavigation,
+  BottomNavigationAction,
+} from "@mui/material";
+import { ref } from "firebase/storage";
+//{hideHeader} put header in a seperate file
 function App() {
+  /*
+  const [value, setValue] = React.useState(0);
+  const location = useLocation();
+  const hideHeader =
+    location.pathname === "/" ||
+    location.pathname === "/Login" ||
+    location.pathname === "/SignUp" ||
+    location.pathname === "/ForgotPassword" ? null : (
+      <Box sx={{ pb: 7 }} ref={ref}>
+        <Paper className="App-menu-bar" elevation={10}>
+          <BottomNavigation
+            showLabels
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+          >
+            <BottomNavigationAction label="Recents" />
+            <BottomNavigationAction label="Favorites" />
+            <BottomNavigationAction label="Nearby" />
+          </BottomNavigation>
+        </Paper>
+      </Box>
+    );
+            */
   return (
     <div className="App">
       <BrowserRouter>
