@@ -43,7 +43,7 @@ function Login() {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
             console.log("Success");
-            navigate("/Dashboard");
+            navigate("/Saved");
         } catch (error: any) {
           if(error.code === "auth/user-not-found") {
             alert("User not found");
