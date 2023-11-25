@@ -119,6 +119,7 @@ function Dashboard() {
   });
   */
   return (
+    <Box>
     <Grid>
       <Card
         className="App-newBackground"
@@ -139,6 +140,7 @@ function Dashboard() {
         {cards}
       </Card>
     </Grid>
+    </Box>
   );
 }
 

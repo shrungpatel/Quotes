@@ -29,6 +29,7 @@ import {
   Button,
   Container,
   Toolbar,
+  Typography,
 } from "@mui/material";
 import { ref } from "firebase/storage";
 //put header in a seperate file and them import that
@@ -38,7 +39,7 @@ function App() {
   const navigate = useNavigate();
   const goToDashboard = () => {
     navigate("/Dashboard");
-  }
+  };
   const goToSaved = () => {
     navigate("/Saved");
   };
@@ -50,60 +51,41 @@ function App() {
     location.pathname === "/Login" ||
     location.pathname === "/SignUp" ||
     location.pathname === "/ForgotPassword" ? null : (
-      // <Box sx={{ pb: 7 }} ref={ref}>
-      //   <Paper className="App-menu-bar" elevation={10}>
-      //     <BottomNavigation
-      //       showLabels
-      //       value={value}
-      //       onChange={(event, newValue) => {
-      //         setValue(newValue);
-      //       }}
-      //     >
-      //       <BottomNavigationAction label="Recents" />
-      //       <BottomNavigationAction label="Favorites" />
-      //       <BottomNavigationAction label="Nearby" />
-      //     </BottomNavigation>
-      //   </Paper>
-      // </Box>
-
-      <AppBar position="static">
-        <Container>
-          <Toolbar disableGutters>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-              {/* {pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
-                >
-                  {page}
-                </Button>                
-              ))} */}
-              <Button
-                key="Products"
-                onClick={goToDashboard}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Dashboard
-              </Button>
-              <Button
-                key="Products"
-                onClick={goToSaved}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Saved
-              </Button>
-              <Button
-                key="Products"
-                onClick={logOut}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                Log out
-              </Button>
-            </Box>
-          </Toolbar>
-        </Container>
-      </AppBar>
+      <>
+        <Box>
+          <AppBar className="App-menu-bar-background" position="fixed" component="nav">
+            <Container>
+              <Toolbar className="App-menu-bar-text" disableGutters sx={{ opacity: 1 }}>
+                <Toolbar />
+                <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                  <Button
+                    key="Products"
+                    onClick={goToDashboard}
+                    sx={{ my: 2, color: "white", flexGrow: 1 }}
+                  >
+                    Dashboard
+                  </Button>
+                  <Button
+                    key="Products"
+                    onClick={goToSaved}
+                    sx={{ my: 2, color: "white", flexGrow: 1 }}
+                  >
+                    Saved
+                  </Button>
+                  <Button
+                    key="Products"
+                    onClick={logOut}
+                    sx={{ my: 2, color: "white", flexGrow: 1 }}
+                  >
+                    Log out
+                  </Button>
+                </Box>
+              </Toolbar>
+            </Container>
+          </AppBar>
+          <Toolbar />
+        </Box>
+      </>
     );
 
   return (
