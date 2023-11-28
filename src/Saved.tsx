@@ -24,8 +24,10 @@ function Saved() {
   const [cards, setCards] = useState<JSX.Element[]>([]);
   const [contents, setContents] = useState<Set<string>>(new Set());
   const [gotQuotes, setGotQuotes] = useState(false);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     getQuotes();
+    let timer = setTimeout(() => setLoading(false), 2000);
   }, []);
   async function getQuotes() {
     if (auth.currentUser != null && gotQuotes == false) {
@@ -38,19 +40,17 @@ function Saved() {
       console.log("Size" + querySnapshot.size);
       console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
-        doc.data().quotesID.forEach((id: any) => {
+        console.log(doc.data().quotesID);
+        let quotesSet = new Set(doc.data().quotesID);
+        quotesSet.forEach((id: any) => {
           makeCards(id);
           i++;
         });
-        console.log("Looped through the for each loop " + i + " times");
         setGotQuotes(true);
-        console.log(gotQuotes);
-        quotesList = doc.data().quotesID;
-        console.log(quotesList.length);
-        console.log("Size of contents " + contents.size);
       });
       //makeCards();
     }
+    console.log("Loading" + loading);
   }
   const makeCards = (id: string) => {
     //quotesList.forEach((id) => {
@@ -69,8 +69,6 @@ function Saved() {
       });
   };
   const makeCard = (content: string, author: string) => {
-    contents.add(content + " " + author);
-    console.log("New thing size " + contents.size);
     // setContents(contents);
     content =
       content.length < 150 ? content : content.substring(0, 150) + "...";
@@ -86,15 +84,16 @@ function Saved() {
               color: pink[600],
             },
           }}
+          defaultChecked
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
         />
       </CardContent>
     );
     setCards(cards);
-    console.log(cards.length);
   };
-  return (
+  console.log("Loading: " + loading);
+  return ( loading ? <h1>Loading...</h1> : 
     <Grid>
       <Card
         className="App-newBackground"
@@ -107,7 +106,7 @@ function Saved() {
       >
         {cards}
       </Card>
-    </Grid>
+    </Grid>  
   );
 }
 export default Saved;

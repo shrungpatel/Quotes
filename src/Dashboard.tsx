@@ -85,6 +85,13 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
+          onChange={() => addQuote(key)}
+          sx={{
+            color: pink[800],
+            '&.Mui-checked': {
+              color: pink[600],
+            },
+          }}
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
         />

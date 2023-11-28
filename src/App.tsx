@@ -59,21 +59,21 @@ function App() {
                 <Toolbar />
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   <Button
-                    key="Products"
+                    key={"dashboard"}
                     onClick={goToDashboard}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
                   >
                     Dashboard
                   </Button>
                   <Button
-                    key="Products"
+                    key={"saved"}
                     onClick={goToSaved}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
                   >
                     Saved
                   </Button>
                   <Button
-                    key="Products"
+                    key={"logout"}
                     onClick={logOut}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
                   >

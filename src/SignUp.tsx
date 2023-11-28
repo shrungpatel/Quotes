@@ -29,7 +29,7 @@ function SignUp() {
         
             console.log(data.uid);
             await setDoc(docRef, data);
-            //navigate("/Login");
+            navigate("/Login");
         } catch (error: any) {
             if(error.code == "auth/email-already-exists") {
                 alert("This email is already in use.")
