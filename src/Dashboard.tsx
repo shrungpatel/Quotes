@@ -70,7 +70,7 @@ function Dashboard() {
           onChange={() => addQuote(key)}
           sx={{
             color: pink[800],
-            '&.Mui-checked': {
+            "&.Mui-checked": {
               color: pink[600],
             },
           }}
@@ -88,7 +88,7 @@ function Dashboard() {
           onChange={() => addQuote(key)}
           sx={{
             color: pink[800],
-            '&.Mui-checked': {
+            "&.Mui-checked": {
               color: pink[600],
             },
           }}
@@ -127,26 +127,29 @@ function Dashboard() {
   */
   return (
     <Box>
-    <Grid>
-      <Card
-        className="App-newBackground"
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignContent: "center",
-          justifyContent: "center",
-        }}
-      >
-        {cards}
-        {cards}
-        {cards}
-        {cards}
-        {cards}
-        {cards}
-        {cards}
-        {cards}
-      </Card>
-    </Grid>
+      <Grid className="App-newBackground">
+        <div>
+          <br></br>
+        </div>
+        <Card
+          className="App-newBackground"
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
+          {cards}
+          {cards}
+          {cards}
+          {cards}
+          {cards}
+          {cards}
+          {cards}
+          {cards}
+        </Card>
+      </Grid>
     </Box>
   );
 }

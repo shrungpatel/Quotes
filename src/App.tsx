@@ -55,7 +55,7 @@ function App() {
         <Box>
           <AppBar className="App-menu-bar-background" position="fixed" component="nav">
             <Container>
-              <Toolbar className="App-menu-bar-text" disableGutters sx={{ opacity: 1 }}>
+              <Toolbar className="App-menu-bar-text" disableGutters>
                 <Toolbar />
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   <Button
