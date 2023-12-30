@@ -43,7 +43,7 @@
 .App-button:hover {
   background-color: #ffcccc;
   color: pink;
-  width: 20%;
+  scale: 1.2;
 }
 
 .App-button {
@@ -86,6 +86,9 @@
   display: right;
   color: pink;
 }
+.App-like-icon:hover {
+  scale: 1.2;
+}
 
 
 .App-menu-bar-background {
@@ -96,4 +99,16 @@
 /* not being used right now */
 .App-menu-bar-text {
   color: rgb(0, 0, 0);
+  font-weight: bold;
+}
+
+.App-menu-bar-text:hover {
+  scale: 1.2;
+  color:rgb(0, 0, 0);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: bold;
+}
+
+.App-search {
+  border-radius: 20px;
 }

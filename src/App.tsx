@@ -53,12 +53,17 @@ function App() {
     location.pathname === "/ForgotPassword" ? null : (
       <>
         <Box>
-          <AppBar className="App-menu-bar-background" position="fixed" component="nav">
+          <AppBar
+            className="App-menu-bar-background"
+            position="fixed"
+            component="nav"
+          >
             <Container>
-              <Toolbar className="App-menu-bar-text" disableGutters>
+              <Toolbar disableGutters>
                 <Toolbar />
                 <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
                   <Button
+                    className="App-menu-bar-text"
                     key={"dashboard"}
                     onClick={goToDashboard}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
@@ -66,13 +71,17 @@ function App() {
                     Dashboard
                   </Button>
                   <Button
+                    className="App-menu-bar-text"
                     key={"saved"}
                     onClick={goToSaved}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
                   >
                     Saved
                   </Button>
+
+                  <input className="App-seach" type="search" placeholder="Search here" />
                   <Button
+                    className="App-menu-bar-text"
                     key={"logout"}
                     onClick={logOut}
                     sx={{ my: 2, color: "white", flexGrow: 1 }}

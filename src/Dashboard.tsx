@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
+import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { db, firestore } from "./Firebase";
@@ -20,6 +21,7 @@ import { collection, query, where, getDocs } from "firebase/firestore";
 import "./App.css";
 import { getAuth } from "firebase/auth";
 import { pink } from "@mui/material/colors";
+import { FavoriteBorderOutlined } from "@mui/icons-material";
 // BREAKPOINT TO DECREASE FONT SIZE WHEN YOU CHANGE THE WINDOW SIZE
 // ADD ICON TO CARD and ADD IT TO THE DATABASE ONCE YOU DO
 // LOOK AT APP BAR (MOVE INTO APP.TSX)
@@ -77,6 +79,14 @@ function Dashboard() {
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
         />
+        <Checkbox
+          className="App-like-icon"
+          {...label}
+          sx={{color:"black"}}
+          // Add a new method that will get the quotes from a particular author
+          onChange={() => addQuote(key)}
+          icon={<PersonSearchOutlinedIcon />}
+        />
       </CardContent>
     ) : (
       <CardContent className="App-Card" key={key}>
@@ -94,6 +104,13 @@ function Dashboard() {
           }}
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
+        />
+        <Checkbox
+          className="App-like-icon"
+          {...label}
+          sx={{color: "black"}}
+          onChange={() => addQuote(key)}
+          icon={<PersonSearchOutlinedIcon />}
         />
       </CardContent>
     );
