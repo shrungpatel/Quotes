@@ -4,9 +4,11 @@
   */
   text-align: center;
 }
+
 .App-newBackground {
   background: url(https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&q=80&w=1000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MXx8fGVufDB8fHx8fA%3D%3D) center / cover no-repeat fixed;
 }
+
 .App-header {
   background: url(https://media.istockphoto.com/id/931318336/photo/holographic-foil-blurred-abstract-background-for-trendy-design.webp?b=1&s=170667a&w=0&k=20&c=W9-CaRSZSySq_W7d0RShegjpwpr3TsK6zyzfD3Znd48=) center / cover no-repeat fixed;
   min-height: 100vh;
@@ -16,21 +18,20 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  box-shadow: 28px 28px 50px 0 rgba(5,15,31,0.16), -23px -23px 45px 0 #FFFFFF;
+  box-shadow: 28px 28px 50px 0 rgba(5, 15, 31, 0.16), -23px -23px 45px 0 #FFFFFF;
 }
 
 .App-box {
   min-width: 40%;
   min-height: 50%;
-  background: (linear-gradient(
-    to right,
-    #ffcccc,
-    #ffcccf,
-  ), 1.0);
+  background: (linear-gradient(to right,
+        #ffcccc,
+        #ffcccf,
+      ), 1.0);
   position: absolute;
-  filter: blur(50%);  
+  backdrop-filter: blur(40px);
   border-radius: 50px;
-  border: 2px solid rgba(255,255,255,0.1);
+  border: 2px solid rgba(255, 255, 255, 0.1);
   /*ffccff*/
   box-shadow: 0 0 100px rgba(0, 0, 0, 0.5);
   padding: 50px 35px;
@@ -47,20 +48,17 @@
 }
 
 .App-button {
-  background-color: linear-gradient(
-    #000
-    #FFFFFF
-  );
+  background-color: linear-gradient(#000 #FFFFFF);
 }
 
-.App-Card { 
+.App-Card {
   background-color: #ffcccc;
   color: black;
   background-color: rgba(255, 255, 255, 0.45);
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
-  
+
   backdrop-filter: blur(15px);
-  
+
   border: #ffccff solid 2.5px;
   /*border-bottom-width: 5px;
   border-right-width: 5px; */
@@ -73,7 +71,7 @@
   box-shadow: 2px;
 }
 
-.App-Card:hover{
+.App-Card:hover {
   background-color: rgba(255, 255, 255, 0.6);
   box-shadow: 0 0 20px 1px rgba(255, 255, 255, 0.75);
   border: none;
@@ -86,6 +84,7 @@
   display: right;
   color: pink;
 }
+
 .App-like-icon:hover {
   scale: 1.2;
 }
@@ -96,6 +95,7 @@
   backdrop-filter: blur(50px);
   box-shadow: 0 0 100px 100px rgba(0, 0, 0, 1);
 }
+
 /* not being used right now */
 .App-menu-bar-text {
   color: rgb(0, 0, 0);
@@ -104,7 +104,7 @@
 
 .App-menu-bar-text:hover {
   scale: 1.2;
-  color:rgb(0, 0, 0);
+  color: rgb(0, 0, 0);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: bold;
 }

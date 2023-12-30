@@ -54,7 +54,6 @@ function SignUp() {
                 <Button onClick={SignUp_Btn_Click} variant="contained">Sign up!</Button>
             </Box>
             </header>
-            <h2>Test</h2>
         </div>
     );
 }
