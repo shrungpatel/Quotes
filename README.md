@@ -1,5 +1,9 @@
 # Scroll and save your favorite quotes!
 
+[Demo part 1](https://drive.google.com/file/d/1bxP5fZKy6AiqKCdMXf19foZaFaqNmlM6/view?usp=sharing)
+[Demo part 2](https://drive.google.com/file/d/10qdoN6lfWt6FMA83LLMt-MGnotXg6VIh/view?usp=sharing)
+ 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
