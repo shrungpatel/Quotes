@@ -22,6 +22,18 @@ import "./App.css";
 import { getAuth } from "firebase/auth";
 import { pink } from "@mui/material/colors";
 import { FavoriteBorderOutlined } from "@mui/icons-material";
+import {
+  createBrowserRouter,
+  RouterProvider,
+  Link,
+  Routes,
+  Route,
+  useNavigate,
+  BrowserRouter,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
+import App from "./App";
 // BREAKPOINT TO DECREASE FONT SIZE WHEN YOU CHANGE THE WINDOW SIZE
 // ADD ICON TO CARD and ADD IT TO THE DATABASE ONCE YOU DO
 // LOOK AT APP BAR (MOVE INTO APP.TSX)
@@ -36,6 +48,7 @@ function Dashboard() {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [cards, setCards] = useState<JSX.Element[]>([]);
   const [value, setValue] = React.useState(0);
+  const [newCards, setNewCards] = useState<JSX.Element[]>([]);
   useEffect(() => {
     getQuotes();
   }, []);
@@ -84,7 +97,7 @@ function Dashboard() {
           {...label}
           sx={{color:"black"}}
           // Add a new method that will get the quotes from a particular author
-          onChange={() => addQuote(key)}
+          onChange={() => getAuthorQuotes(author)}
           icon={<PersonSearchOutlinedIcon />}
         />
       </CardContent>
@@ -109,17 +122,40 @@ function Dashboard() {
           className="App-like-icon"
           {...label}
           sx={{color: "black"}}
-          onChange={() => addQuote(key)}
+          onChange={() => getAuthorQuotes(author)}
           icon={<PersonSearchOutlinedIcon />}
         />
       </CardContent>
     );
   const getQuotes = () => {
     axios
-      .get("https://api.quotable.io/quotes/random?limit=50")
+      .get("https://api.quotable.io/quotes/random?limit=50?maxLength=150")
       .then(function (response) {
         // TO-DO: Let new cards -> set cards is a new function
-        let newCards = [];
+        for (let a = 0; a < 50; a++) {
+          newCards.push(
+            makeCard(
+              response.data[a].content,
+              response.data[a].author,
+              response.data[a]._id
+            )
+          );
+        }
+        setCards(newCards);
+        newCards;
+        // setLoading(true/false)
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+  const getAuthorQuotes = (author: string) => {
+    let url:string = "https://api.quotable.io/search/quotes?query=" + author + "&fields=author"; 
+    axios
+      .get(url)
+      .then(function (response) {
+        App.goToSearch;
+        // TO-DO: Let new cards -> set cards is a new function
         for (let a = 0; a < 50; a++) {
           newCards.push(
             makeCard(

@@ -96,7 +96,7 @@ function Login() {
           </Stack>
 
           <div>
-            <Link onClick={forgotClick}>Forgot Password</Link>
+            <Link className="App-link" onClick={forgotClick}>Forgot Password</Link>
             <br></br>
             <Link onClick={signup}>Create an account</Link>
           </div>

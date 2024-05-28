@@ -37,8 +37,8 @@ function Saved() {
       );
       const querySnapshot = await getDocs(q);
       let i = 0;
-      console.log("Size" + querySnapshot.size);
-      console.log(gotQuotes);
+     // console.log("Size" + querySnapshot.size);
+     // console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
         console.log(doc.data().quotesID);
         let quotesSet = new Set(doc.data().quotesID);
@@ -92,8 +92,8 @@ function Saved() {
     );
     setCards(cards);
   };
-  console.log("Loading: " + loading);
-  return ( loading ? <h1>Loading...</h1> : 
+  // console.log("Loading: " + loading);
+  return ( loading ? <h1 className="middle">Loading (updated)...</h1> : 
     <Grid>
       <Card
         className="App-newBackground"

@@ -40,6 +40,9 @@ function App() {
   const goToDashboard = () => {
     navigate("/Dashboard");
   };
+  const goToSearch = () => {
+    navigate("/Search");
+  }
   const goToSaved = () => {
     navigate("/Saved");
   };
