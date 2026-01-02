@@ -68,6 +68,13 @@ function Login() {
     SignIn_Home(email, password);
   };
 
+  const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      SignIn_Home(email, password);
+    }
+  };
+
+
   return (
     <div className="App">
       <header className="App-header">
@@ -91,6 +98,7 @@ function Login() {
                 value={password}
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
+                onKeyDown={handleEnterKey}
               />
             </div>
           </Stack>

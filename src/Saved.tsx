@@ -30,7 +30,7 @@ function Saved() {
     let timer = setTimeout(() => setLoading(false), 2000);
   }, []);
   async function getQuotes() {
-    if (auth.currentUser != null && gotQuotes == false) {
+    if (auth.currentUser != null && gotQuotes === false) {
       const q = query(
         collection(db, "Users"),
         where("email", "==", auth.currentUser.email)

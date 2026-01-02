@@ -128,25 +128,32 @@ function Dashboard() {
       </CardContent>
     );
   const getQuotes = () => {
+
     axios
-      .get("https://api.quotable.io/quotes/random?limit=50?maxLength=150")
-      .then(function (response) {
+      .get("http://localhost:5000/quotes")
+      .then(response => {
+    //axios
+    //  .get("https://api.quotable.io/quotes/random?limit=50&maxLength=150")
+    //  .then(function (response) {
         // TO-DO: Let new cards -> set cards is a new function
+        console.log("Quotes fetched from backend:");
+        //console.log(response.data.results);
         for (let a = 0; a < 50; a++) {
           newCards.push(
             makeCard(
-              response.data[a].content,
-              response.data[a].author,
-              response.data[a]._id
+              response.data[a].q,//content,
+              response.data[a].a,//uthor,
+              response.data[a].c//_id
             )
           );
         }
         setCards(newCards);
-        newCards;
+        //newCards;
         // setLoading(true/false)
+        
       })
       .catch(function (error) {
-        console.log(error);
+        console.log("Error fetching quotes from frontend:", error);
       });
   };
   const getAuthorQuotes = (author: string) => {
@@ -154,7 +161,7 @@ function Dashboard() {
     axios
       .get(url)
       .then(function (response) {
-        App.goToSearch;
+        //App.goToSearch;
         // TO-DO: Let new cards -> set cards is a new function
         for (let a = 0; a < 50; a++) {
           newCards.push(
