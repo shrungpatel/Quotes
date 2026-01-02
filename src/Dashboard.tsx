@@ -142,7 +142,7 @@ function Dashboard() {
           );
         }
         setCards(newCards);
-        newCards;
+        //newCards;
         // setLoading(true/false)
       })
       .catch(function (error) {
@@ -154,7 +154,7 @@ function Dashboard() {
     axios
       .get(url)
       .then(function (response) {
-        App.goToSearch;
+        //App.goToSearch;
         // TO-DO: Let new cards -> set cards is a new function
         for (let a = 0; a < 50; a++) {
           newCards.push(
