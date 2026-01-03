@@ -1,6 +1,6 @@
 '''
-This script is used to test if the the quotes API is reachable and returns data correctly.'''
-
+This script is used to test if the the quotes API is reachable and returns data correctly.
+'''
 
 import requests
 

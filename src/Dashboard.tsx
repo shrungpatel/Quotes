@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
-import PersonSearchOutlinedIcon from '@mui/icons-material/PersonSearchOutlined';
+import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import firebase from "firebase/app";
 import "firebase/firestore";
 import { db, firestore } from "./Firebase";
@@ -95,7 +95,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          sx={{color:"black"}}
+          sx={{ color: "black" }}
           // Add a new method that will get the quotes from a particular author
           onChange={() => getAuthorQuotes(author)}
           icon={<PersonSearchOutlinedIcon />}
@@ -121,49 +121,49 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          sx={{color: "black"}}
+          sx={{ color: "black" }}
           onChange={() => getAuthorQuotes(author)}
           icon={<PersonSearchOutlinedIcon />}
         />
       </CardContent>
     );
   const getQuotes = () => {
-
     axios
       .get("http://localhost:5000/quotes")
-      .then(response => {
-    //axios
-    //  .get("https://api.quotable.io/quotes/random?limit=50&maxLength=150")
-    //  .then(function (response) {
+      .then((response) => {
+        //axios.get("https://api.quotable.io/quotes/random?limit=50&maxLength=150")
+        //     .then(function (response) {
         // TO-DO: Let new cards -> set cards is a new function
         console.log("Quotes fetched from backend:");
         //console.log(response.data.results);
-        for (let a = 0; a < 50; a++) {
+        for (let a = 0; a < response.data.length; a++) {
           newCards.push(
             makeCard(
-              response.data[a].q,//content,
-              response.data[a].a,//uthor,
-              response.data[a].c//_id
+              response.data[a].q, //content,
+              response.data[a].a, //uthor,
+              response.data[a].c //_id
             )
           );
         }
         setCards(newCards);
         //newCards;
         // setLoading(true/false)
-        
       })
       .catch(function (error) {
         console.log("Error fetching quotes from frontend:", error);
       });
   };
   const getAuthorQuotes = (author: string) => {
-    let url:string = "https://api.quotable.io/search/quotes?query=" + author + "&fields=author"; 
+    let url: string =
+      "https://api.quotable.io/search/quotes?query=" +
+      author +
+      "&fields=author";
     axios
       .get(url)
       .then(function (response) {
         //App.goToSearch;
         // TO-DO: Let new cards -> set cards is a new function
-        for (let a = 0; a < 50; a++) {
+        for (let a = 0; a < response.data.length; a++) {
           newCards.push(
             makeCard(
               response.data[a].content,
@@ -200,13 +200,6 @@ function Dashboard() {
             justifyContent: "center",
           }}
         >
-          {cards}
-          {cards}
-          {cards}
-          {cards}
-          {cards}
-          {cards}
-          {cards}
           {cards}
         </Card>
       </Grid>
