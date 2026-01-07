@@ -82,7 +82,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(key)}
+          onChange={() => addQuote(content)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {
@@ -108,7 +108,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(key)}
+          onChange={() => addQuote(content)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {
@@ -224,6 +224,5 @@ function hash(q: string, a: string): string {
     console.log("Error in hashing:", e);
   }
   // Convert the integer to a positive hexadecimal string
-  console.log((Math.abs(hash) >>> 0).toString(16));
   return (Math.abs(hash) >>> 0).toString(16);
 }
