@@ -13,7 +13,8 @@ app.get('/quotes', async (req, res) => {
         const responses = [];
         const NUMBER_OF_CALLS = 5;
         for (let i = 0; i < NUMBER_OF_CALLS; i++) {
-            responses.push(await axios.get('https://zenquotes.io/api/quotes').data);
+            const response = await axios.get('https://zenquotes.io/api/quotes');
+            responses.push(response.data);
         }
         const combinedQuotes = [...responses[0], ...responses[1], ...responses[2], ...responses[3], ...responses[4]];
         res.json(combinedQuotes);

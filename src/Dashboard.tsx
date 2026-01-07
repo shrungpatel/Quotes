@@ -141,7 +141,8 @@ function Dashboard() {
             makeCard(
               response.data[a].q, //content,
               response.data[a].a, //uthor,
-              response.data[a].c //_id
+              hash(response.data[a].q, response.data[a].a)
+              //response.data[a].c //_id
             )
           );
         }
@@ -208,3 +209,21 @@ function Dashboard() {
 }
 
 export default Dashboard;
+function hash(q: string, a: string): string {
+  /* Hash function to generate a unique key for each quote */
+  let str = `${q}-${a}`;
+  let hash = 0;
+  try {
+    for (let i = 0; i < str.length; i++) {
+      const char = str.charCodeAt(i);
+      // Using bitwise shift for speed (31 * hash + char)
+      hash = (hash << 5) - hash + char;
+      hash |= 0; // Convert to 32bit integer
+    }
+  } catch (e) {
+    console.log("Error in hashing:", e);
+  }
+  // Convert the integer to a positive hexadecimal string
+  console.log((Math.abs(hash) >>> 0).toString(16));
+  return (Math.abs(hash) >>> 0).toString(16);
+}
