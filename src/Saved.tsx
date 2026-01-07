@@ -40,9 +40,10 @@ function Saved() {
      // console.log("Size" + querySnapshot.size);
      // console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
-        console.log(doc.data().quotesID);
+        console.log("List: " + doc.data().quotesID);
         let quotesSet = new Set(doc.data().quotesID);
         quotesSet.forEach((id: any) => {
+          console.log("Making card for: " + id);
           makeCards(id);
           i++;
         });
@@ -52,9 +53,12 @@ function Saved() {
     }
     console.log("Loading" + loading);
   }
-  const makeCards = (id: string) => {
+  const makeCards = (content: string) => {
     //quotesList.forEach((id) => {
-    const url = `https://api.quotable.io/quotes/${id}`;
+    // trim content to the first 3 words
+    let id = content.trim().substring(0, 20);
+    const url = `https://zenquotes.io/api/quotes/keyword=${id}`;
+    //const url = `https://api.quotable.io/quotes/${id}`;
     processURL(url);
     //});
   };
@@ -62,7 +66,8 @@ function Saved() {
     axios
       .get(url)
       .then(function (response) {
-        makeCard(response.data.content, response.data.author);
+        console.log("Fetched quote: " + response.data.q);
+        makeCard(response.data.q, response.data.a);
       })
       .catch(function (error) {
         console.log(error);

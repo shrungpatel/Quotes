@@ -87,6 +87,7 @@ function Login() {
                 label="Email"
                 variant="filled"
                 value={email}
+                onKeyDown={handleEnterKey}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
