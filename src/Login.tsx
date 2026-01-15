@@ -116,6 +116,14 @@ function Login() {
           >
             Sign in
           </Button>
+          <br></br>
+          <Button
+            onClick={signin}
+            variant="contained"
+            className="App-button"
+          >
+            Continue without logging in
+          </Button>
         </Box>
       </header>
     </div>

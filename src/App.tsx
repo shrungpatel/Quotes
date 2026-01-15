@@ -32,6 +32,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ref } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 //put header in a seperate file and them import that
 function App() {
   const [value, setValue] = React.useState(0);
@@ -47,6 +48,10 @@ function App() {
     navigate("/Saved");
   };
   const logOut = () => {
+    // log out user out of the firebase auth
+    const auth = getAuth();
+    auth.signOut();
+    console.log("Logged out");
     navigate("/Login");
   };
   const hideHeader =

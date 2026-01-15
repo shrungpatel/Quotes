@@ -45,6 +45,7 @@ import App from "./App";
 // HAVE THE CHECK ALREADY THERE WHEN THE USER SEES A QUOTE THEY ALREADY LIKED
 // SHOW THE WHOLE QUOTE WHEN YOU CLICK ON IT
 function Dashboard() {
+  const navigate = useNavigate();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [cards, setCards] = useState<JSX.Element[]>([]);
   const [value, setValue] = React.useState(0);
@@ -61,9 +62,16 @@ function Dashboard() {
       );
       const current = doc(db, "User", "auth.currentUser.email");
       const querySnapshot = await getDocs(q);
+      console.log(querySnapshot.size);
+      console.log(querySnapshot)
+      if (querySnapshot.empty) {
+        navigate("/Login");
+        return;
+      }
       let pastList: string[] | null = [];
       querySnapshot.forEach(async (doc) => {
         const docRef = doc.ref;
+        console.log("Document data:", doc.data());
         pastList = doc.data().quotesID;
         if (pastList != null && pastList.length != 0) {
           pastList.push(key);
