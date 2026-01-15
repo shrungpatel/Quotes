@@ -86,8 +86,13 @@ function App() {
                   >
                     Saved
                   </Button>
-
-                  <input className="App-seach" type="search" placeholder="Search here" />
+                  {/* 1px solid #ccc for the search bar*/}
+                  <input 
+                    className="App-seach" 
+                    type="search" 
+                    placeholder="Search here" 
+                    style={{ borderRadius: '20px', border: 'none', padding: '8px' }}
+                  />
                   <Button
                     className="App-menu-bar-text"
                     key={"logout"}
