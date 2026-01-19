@@ -43,7 +43,7 @@ function App() {
   };
   const goToSearch = () => {
     navigate("/Search");
-  }
+  };
   const goToSaved = () => {
     navigate("/Saved");
   };
@@ -87,11 +87,15 @@ function App() {
                     Saved
                   </Button>
                   {/* 1px solid #ccc for the search bar*/}
-                  <input 
-                    className="App-seach" 
-                    type="search" 
-                    placeholder="Search here" 
-                    style={{ borderRadius: '20px', border: 'none', padding: '8px' }}
+                  <input
+                    className="App-seach"
+                    type="search"
+                    placeholder="Search here"
+                    style={{
+                      borderRadius: "20px",
+                      border: "none",
+                      padding: "8px",
+                    }}
                   />
                   <Button
                     className="App-menu-bar-text"

@@ -51,6 +51,7 @@ function Dashboard() {
   const [value, setValue] = React.useState(0);
   const [newCards, setNewCards] = useState<JSX.Element[]>([]);
   useEffect(() => {
+    document.title = "Home";
     getQuotes();
   }, []);
   const auth = getAuth();
@@ -58,12 +59,12 @@ function Dashboard() {
     if (auth.currentUser != null) {
       const q = query(
         collection(db, "Users"),
-        where("email", "==", auth.currentUser.email)
+        where("email", "==", auth.currentUser.email),
       );
       const current = doc(db, "User", "auth.currentUser.email");
       const querySnapshot = await getDocs(q);
       console.log(querySnapshot.size);
-      console.log(querySnapshot)
+      console.log(querySnapshot);
       if (querySnapshot.empty) {
         navigate("/Login");
         return;
@@ -147,11 +148,10 @@ function Dashboard() {
         for (let a = 0; a < response.data.length; a++) {
           newCards.push(
             makeCard(
-              response.data[a].q, //content,
-              response.data[a].a, //uthor,
-              hash(response.data[a].q, response.data[a].a)
-              //response.data[a].c //_id
-            )
+              response.data[a].q,
+              response.data[a].a,
+              hash(response.data[a].q, response.data[a].a),
+            ),
           );
         }
         setCards(newCards);
@@ -177,8 +177,8 @@ function Dashboard() {
             makeCard(
               response.data[a].content,
               response.data[a].author,
-              response.data[a]._id
-            )
+              response.data[a]._id,
+            ),
           );
         }
         setCards(newCards);
@@ -196,6 +196,7 @@ function Dashboard() {
   */
   return (
     <Box>
+      <title>Home</title>
       <Grid className="App-newBackground">
         <div>
           <br></br>

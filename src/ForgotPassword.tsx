@@ -1,4 +1,4 @@
-import React, { lazy } from "react";
+import React, { useEffect, lazy } from "react";
 import "./App.css";
 import { Button, Box } from "@mui/material/";
 import { Container, Link, TextField } from "@mui/material";
@@ -9,6 +9,9 @@ function ForgotPassword() {
   const loginClick = () => {
     navigate("/Login");
   };
+  useEffect(() => {
+    document.title = "Forgot Password";
+  }, []);
   return (
     <div className="App">
       <header className="App-header">
