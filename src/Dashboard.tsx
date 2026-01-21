@@ -55,7 +55,7 @@ function Dashboard() {
     getQuotes();
   }, []);
   const auth = getAuth();
-  async function addQuote(key: string) {
+  async function addQuote(key: string, author: string) {
     if (auth.currentUser != null) {
       const q = query(
         collection(db, "Users"),
@@ -69,17 +69,35 @@ function Dashboard() {
         navigate("/Login");
         return;
       }
-      let pastList: string[] | null = [];
+      let pastList: Map<string, string> | null = new Map(); //: string[][] | null = [];
       querySnapshot.forEach(async (doc) => {
         const docRef = doc.ref;
-        console.log("Document data:", doc.data());
-        pastList = doc.data().quotesID;
-        if (pastList != null && pastList.length != 0) {
-          pastList.push(key);
+        const quotesID = doc.data().quotesID;
+        // Check if quotesID is a Map and not null
+        if (quotesID instanceof Map) {
+          pastList = quotesID;
         } else {
-          pastList = [key];
+          pastList = new Map();
         }
-        await updateDoc(docRef, { quotesID: pastList });
+        pastList.set(key, author);
+        pastList.forEach((author: string) => {
+          console.log("Author" + author);
+        });
+        const customMap = quotesID; // Replace with your actual Map variable
+
+        // Convert the Map to a plain object
+        const quotesList = Object.fromEntries(pastList);
+        //console.log(pastList.)
+        /*const docRef = doc.ref;
+        pastList = doc.data().quotesID;
+        if (pastList instanceof Map) {
+          //pastList != null && pastList.length != 0) {
+          pastList.set(key, author);
+        } else {
+          pastList.set(key, author);
+        }
+        console.log("New list is " + pastList); */
+        await updateDoc(docRef, { quotesID: quotesList });
       });
     }
   }
@@ -91,7 +109,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(content)}
+          onChange={() => addQuote(content, author)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {
@@ -117,7 +135,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(content)}
+          onChange={() => addQuote(content, author)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {

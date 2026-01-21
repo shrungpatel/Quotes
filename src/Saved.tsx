@@ -33,34 +33,49 @@ function Saved() {
     if (auth.currentUser != null && gotQuotes === false) {
       const q = query(
         collection(db, "Users"),
-        where("email", "==", auth.currentUser.email)
+        where("email", "==", auth.currentUser.email),
       );
       const querySnapshot = await getDocs(q);
       let i = 0;
-     // console.log("Size" + querySnapshot.size);
-     // console.log(gotQuotes);
+      console.log("Size" + querySnapshot.size);
+      // console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
-        console.log("List: " + doc.data().quotesID);
-        let quotesSet = new Set(doc.data().quotesID);
-        quotesSet.forEach((id: any) => {
-          console.log("Making card for: " + id);
-          makeCards(id);
+        //console.log("List: " + doc.data().quotesID);
+
+        // Assuming quotesID is an array of tuples or pairs (e.g., [key, author])
+        //let quotesSet: Set<[string, string]> = new Set(doc.data().quotesID);
+        // Convert Set to an Array to access items by index
+        //const quotesArray = Array.from(quotesSet);
+        const quotesArray = doc.data().quotesID;
+        console.log(quotesArray.length);
+        Object.values(quotesArray).forEach((quote: any) => {
+          makeCards(quote[0], quote[1]);
+          console.log("Making card for " + quote);
           i++;
         });
+
+        /**let quotesSet: any = new Set(doc.data().quotesID);
+        quotesSet.forEach((index: any) => {
+          //console.log("Making card for: " + id);
+          makeCards(quotesSet[index][0], quotesSet[index][1]);
+          i++;
+        });*/
         setGotQuotes(true);
       });
       //makeCards();
     }
     console.log("Loading" + loading);
   }
-  const makeCards = (content: string) => {
+  const makeCards = (content: string, author: string) => {
     //quotesList.forEach((id) => {
     // trim content to the first 3 words
+    makeCard(content, author);
+    /**
     let id = content.trim().substring(0, 20);
     const url = `https://zenquotes.io/api/quotes/keyword=${id}`;
     //const url = `https://api.quotable.io/quotes/${id}`;
     processURL(url);
-    //});
+    //}); **/
   };
   const processURL = (url: string) => {
     axios
@@ -93,12 +108,14 @@ function Saved() {
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
         />
-      </CardContent>
+      </CardContent>,
     );
     setCards(cards);
   };
   // console.log("Loading: " + loading);
-  return ( loading ? <h1 className="middle">Loading (updated)...</h1> : 
+  return loading ? (
+    <h1 className="middle">Loading (updated)...</h1>
+  ) : (
     <Grid>
       <Card
         className="App-newBackground"
@@ -111,7 +128,7 @@ function Saved() {
       >
         {cards}
       </Card>
-    </Grid>  
+    </Grid>
   );
 }
 export default Saved;
