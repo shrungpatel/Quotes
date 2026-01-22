@@ -30,6 +30,10 @@ function Saved() {
     let timer = setTimeout(() => setLoading(false), 2000);
   }, []);
   async function getQuotes() {
+    const auth = getAuth();
+    console.log(
+      "Auth.currentUser: " + auth.currentUser + " Got quotes: " + gotQuotes,
+    );
     if (auth.currentUser != null && gotQuotes === false) {
       const q = query(
         collection(db, "Users"),
@@ -37,34 +41,19 @@ function Saved() {
       );
       const querySnapshot = await getDocs(q);
       let i = 0;
-      console.log("Size" + querySnapshot.size);
       // console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
-        //console.log("List: " + doc.data().quotesID);
-
-        // Assuming quotesID is an array of tuples or pairs (e.g., [key, author])
-        //let quotesSet: Set<[string, string]> = new Set(doc.data().quotesID);
-        // Convert Set to an Array to access items by index
-        //const quotesArray = Array.from(quotesSet);
         const quotesArray = doc.data().quotesID;
-        console.log(quotesArray.length);
-        Object.values(quotesArray).forEach((quote: any) => {
-          makeCards(quote[0], quote[1]);
-          console.log("Making card for " + quote);
+        console.log(Object.entries(quotesArray));
+        Object.entries(quotesArray).forEach((pair: any) => {
+          makeCard(pair[0], pair[1]);
           i++;
         });
-
-        /**let quotesSet: any = new Set(doc.data().quotesID);
-        quotesSet.forEach((index: any) => {
-          //console.log("Making card for: " + id);
-          makeCards(quotesSet[index][0], quotesSet[index][1]);
-          i++;
-        });*/
         setGotQuotes(true);
       });
       //makeCards();
     }
-    console.log("Loading" + loading);
+    console.log("Loading: " + loading);
   }
   const makeCards = (content: string, author: string) => {
     //quotesList.forEach((id) => {
@@ -124,6 +113,7 @@ function Saved() {
           flexWrap: "wrap",
           alignContent: "center",
           justifyContent: "center",
+          height: "100vh" /* takes up the entire screen */,
         }}
       >
         {cards}

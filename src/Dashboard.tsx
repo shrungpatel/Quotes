@@ -69,22 +69,24 @@ function Dashboard() {
         navigate("/Login");
         return;
       }
-      let pastList: Map<string, string> | null = new Map(); //: string[][] | null = [];
+      let pastList: Map<string, string> = new Map(); //: string[][] | null = [];
       querySnapshot.forEach(async (doc) => {
         const docRef = doc.ref;
         const quotesID = doc.data().quotesID;
         // Check if quotesID is a Map and not null
-        if (quotesID instanceof Map) {
-          pastList = quotesID;
-        } else {
+        console.log(typeof quotesID);
+        if (Object.keys(quotesID).length === 0) {
           pastList = new Map();
+        } else {
+          //const map = new Map(Object.entries({foo: 'bar'}));
+          pastList = new Map(Object.entries(quotesID));
         }
+        // she's applying to a company called sigma
         pastList.set(key, author);
-        pastList.forEach((author: string) => {
-          console.log("Author" + author);
+        pastList.forEach((quote: string, author: string) => {
+          console.log("New Quote: " + quote + " Author: " + author);
         });
         const customMap = quotesID; // Replace with your actual Map variable
-
         // Convert the Map to a plain object
         const quotesList = Object.fromEntries(pastList);
         //console.log(pastList.)
