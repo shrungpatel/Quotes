@@ -30,37 +30,41 @@ function Saved() {
     let timer = setTimeout(() => setLoading(false), 2000);
   }, []);
   async function getQuotes() {
+    const auth = getAuth();
+    console.log(
+      "Auth.currentUser: " + auth.currentUser + " Got quotes: " + gotQuotes,
+    );
     if (auth.currentUser != null && gotQuotes === false) {
       const q = query(
         collection(db, "Users"),
-        where("email", "==", auth.currentUser.email)
+        where("email", "==", auth.currentUser.email),
       );
       const querySnapshot = await getDocs(q);
       let i = 0;
-     // console.log("Size" + querySnapshot.size);
-     // console.log(gotQuotes);
+      // console.log(gotQuotes);
       querySnapshot.forEach(async (doc) => {
-        console.log("List: " + doc.data().quotesID);
-        let quotesSet = new Set(doc.data().quotesID);
-        quotesSet.forEach((id: any) => {
-          console.log("Making card for: " + id);
-          makeCards(id);
+        const quotesArray = doc.data().quotesID;
+        console.log(Object.entries(quotesArray));
+        Object.entries(quotesArray).forEach((pair: any) => {
+          makeCard(pair[0], pair[1]);
           i++;
         });
         setGotQuotes(true);
       });
       //makeCards();
     }
-    console.log("Loading" + loading);
+    console.log("Loading: " + loading);
   }
-  const makeCards = (content: string) => {
+  const makeCards = (content: string, author: string) => {
     //quotesList.forEach((id) => {
     // trim content to the first 3 words
+    makeCard(content, author);
+    /**
     let id = content.trim().substring(0, 20);
     const url = `https://zenquotes.io/api/quotes/keyword=${id}`;
     //const url = `https://api.quotable.io/quotes/${id}`;
     processURL(url);
-    //});
+    //}); **/
   };
   const processURL = (url: string) => {
     axios
@@ -93,12 +97,14 @@ function Saved() {
           icon={<FavoriteBorder />}
           checkedIcon={<Favorite />}
         />
-      </CardContent>
+      </CardContent>,
     );
     setCards(cards);
   };
   // console.log("Loading: " + loading);
-  return ( loading ? <h1 className="middle">Loading (updated)...</h1> : 
+  return loading ? (
+    <h1 className="middle">Loading (updated)...</h1>
+  ) : (
     <Grid>
       <Card
         className="App-newBackground"
@@ -107,11 +113,12 @@ function Saved() {
           flexWrap: "wrap",
           alignContent: "center",
           justifyContent: "center",
+          height: "100vh" /* takes up the entire screen */,
         }}
       >
         {cards}
       </Card>
-    </Grid>  
+    </Grid>
   );
 }
 export default Saved;

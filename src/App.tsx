@@ -32,6 +32,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ref } from "firebase/storage";
+import { getAuth } from "firebase/auth";
 //put header in a seperate file and them import that
 function App() {
   const [value, setValue] = React.useState(0);
@@ -42,11 +43,15 @@ function App() {
   };
   const goToSearch = () => {
     navigate("/Search");
-  }
+  };
   const goToSaved = () => {
     navigate("/Saved");
   };
   const logOut = () => {
+    // log out user out of the firebase auth
+    const auth = getAuth();
+    auth.signOut();
+    console.log("Logged out");
     navigate("/Login");
   };
   const hideHeader =
@@ -81,8 +86,17 @@ function App() {
                   >
                     Saved
                   </Button>
-
-                  <input className="App-seach" type="search" placeholder="Search here" />
+                  {/* 1px solid #ccc for the search bar*/}
+                  <input
+                    className="App-seach"
+                    type="search"
+                    placeholder="Search here"
+                    style={{
+                      borderRadius: "20px",
+                      border: "none",
+                      padding: "8px",
+                    }}
+                  />
                   <Button
                     className="App-menu-bar-text"
                     key={"logout"}

@@ -6,10 +6,7 @@ import ForgotPassword from "./ForgotPassword";
 import { useNavigate } from "react-router-dom";
 import { db } from "./Firebase";
 import { collection, doc, getDoc } from "firebase/firestore";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 function Login() {
   const navigate = useNavigate();
   const forgotClick = () => {
@@ -44,7 +41,7 @@ function Login() {
       const userCredential = await signInWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       console.log("Success");
       navigate("/Dashboard");
@@ -69,14 +66,18 @@ function Login() {
   };
 
   const handleEnterKey = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       SignIn_Home(email, password);
     }
   };
 
+  useEffect(() => {
+    document.title = "Login";
+  }, []);
 
   return (
     <div className="App">
+      <title>Login</title>
       <header className="App-header">
         <Box className="App-box">
           <h1>Login</h1>
@@ -105,7 +106,9 @@ function Login() {
           </Stack>
 
           <div>
-            <Link className="App-link" onClick={forgotClick}>Forgot Password</Link>
+            <Link className="App-link" onClick={forgotClick}>
+              Forgot Password
+            </Link>
             <br></br>
             <Link onClick={signup}>Create an account</Link>
           </div>
@@ -115,6 +118,10 @@ function Login() {
             className="App-button"
           >
             Sign in
+          </Button>
+          <br></br>
+          <Button onClick={signin} variant="contained" className="App-button">
+            Continue as a guest
           </Button>
         </Box>
       </header>

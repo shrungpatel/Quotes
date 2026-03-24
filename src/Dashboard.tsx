@@ -45,32 +45,61 @@ import App from "./App";
 // HAVE THE CHECK ALREADY THERE WHEN THE USER SEES A QUOTE THEY ALREADY LIKED
 // SHOW THE WHOLE QUOTE WHEN YOU CLICK ON IT
 function Dashboard() {
+  const navigate = useNavigate();
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const [cards, setCards] = useState<JSX.Element[]>([]);
   const [value, setValue] = React.useState(0);
   const [newCards, setNewCards] = useState<JSX.Element[]>([]);
   useEffect(() => {
+    document.title = "Home";
     getQuotes();
   }, []);
   const auth = getAuth();
-  async function addQuote(key: string) {
+  async function addQuote(key: string, author: string) {
     if (auth.currentUser != null) {
       const q = query(
         collection(db, "Users"),
-        where("email", "==", auth.currentUser.email)
+        where("email", "==", auth.currentUser.email),
       );
       const current = doc(db, "User", "auth.currentUser.email");
       const querySnapshot = await getDocs(q);
-      let pastList: string[] | null = [];
+      console.log(querySnapshot.size);
+      console.log(querySnapshot);
+      if (querySnapshot.empty) {
+        navigate("/Login");
+        return;
+      }
+      let pastList: Map<string, string> = new Map(); //: string[][] | null = [];
       querySnapshot.forEach(async (doc) => {
         const docRef = doc.ref;
-        pastList = doc.data().quotesID;
-        if (pastList != null && pastList.length != 0) {
-          pastList.push(key);
+        const quotesID = doc.data().quotesID;
+        // Check if quotesID is a Map and not null
+        console.log(typeof quotesID);
+        if (Object.keys(quotesID).length === 0) {
+          pastList = new Map();
         } else {
-          pastList = [key];
+          //const map = new Map(Object.entries({foo: 'bar'}));
+          pastList = new Map(Object.entries(quotesID));
         }
-        await updateDoc(docRef, { quotesID: pastList });
+        // she's applying to a company called sigma
+        pastList.set(key, author);
+        pastList.forEach((quote: string, author: string) => {
+          console.log("New Quote: " + quote + " Author: " + author);
+        });
+        const customMap = quotesID; // Replace with your actual Map variable
+        // Convert the Map to a plain object
+        const quotesList = Object.fromEntries(pastList);
+        //console.log(pastList.)
+        /*const docRef = doc.ref;
+        pastList = doc.data().quotesID;
+        if (pastList instanceof Map) {
+          //pastList != null && pastList.length != 0) {
+          pastList.set(key, author);
+        } else {
+          pastList.set(key, author);
+        }
+        console.log("New list is " + pastList); */
+        await updateDoc(docRef, { quotesID: quotesList });
       });
     }
   }
@@ -82,7 +111,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(content)}
+          onChange={() => addQuote(content, author)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {
@@ -108,7 +137,7 @@ function Dashboard() {
         <Checkbox
           className="App-like-icon"
           {...label}
-          onChange={() => addQuote(content)}
+          onChange={() => addQuote(content, author)}
           sx={{
             color: pink[800],
             "&.Mui-checked": {
@@ -139,11 +168,10 @@ function Dashboard() {
         for (let a = 0; a < response.data.length; a++) {
           newCards.push(
             makeCard(
-              response.data[a].q, //content,
-              response.data[a].a, //uthor,
-              hash(response.data[a].q, response.data[a].a)
-              //response.data[a].c //_id
-            )
+              response.data[a].q,
+              response.data[a].a,
+              hash(response.data[a].q, response.data[a].a),
+            ),
           );
         }
         setCards(newCards);
@@ -169,8 +197,8 @@ function Dashboard() {
             makeCard(
               response.data[a].content,
               response.data[a].author,
-              response.data[a]._id
-            )
+              response.data[a]._id,
+            ),
           );
         }
         setCards(newCards);
@@ -188,6 +216,7 @@ function Dashboard() {
   */
   return (
     <Box>
+      <title>Home</title>
       <Grid className="App-newBackground">
         <div>
           <br></br>

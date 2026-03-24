@@ -26,12 +26,16 @@ function SignUp() {
     }
   };
 
+  useEffect(() => {
+    document.title = "Sign Up";
+  }, []);
+
   async function SignUp_Home(email: string, password: string) {
     try {
       const userCredential = createUserWithEmailAndPassword(
         auth,
         email,
-        password
+        password,
       );
       const user = (await userCredential).user;
       const docRef = doc(firestore, "Users", email);
