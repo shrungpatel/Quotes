@@ -81,7 +81,6 @@ function Dashboard() {
           //const map = new Map(Object.entries({foo: 'bar'}));
           pastList = new Map(Object.entries(quotesID));
         }
-        // she's applying to a company called sigma
         pastList.set(key, author);
         pastList.forEach((quote: string, author: string) => {
           console.log("New Quote: " + quote + " Author: " + author);
