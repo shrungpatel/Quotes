@@ -89,8 +89,8 @@ function Dashboard() {
               color: pink[600],
             },
           }}
-          icon={<FavoriteBorder />}
-          checkedIcon={<Favorite />}
+          /*icon={<FavoriteBorder />}
+          checkedIcon={<Favorite />}*/
         />
         <Checkbox
           className="App-like-icon"
@@ -98,7 +98,7 @@ function Dashboard() {
           sx={{ color: "black" }}
           // Add a new method that will get the quotes from a particular author
           onChange={() => getAuthorQuotes(author)}
-          icon={<PersonSearchOutlinedIcon />}
+          /*icon={<PersonSearchOutlinedIcon />}*/
         />
       </CardContent>
     ) : (
@@ -115,15 +115,15 @@ function Dashboard() {
               color: pink[600],
             },
           }}
-          icon={<FavoriteBorder />}
-          checkedIcon={<Favorite />}
+          /*icon={<FavoriteBorder />}
+          checkedIcon={<Favorite />}*/
         />
         <Checkbox
           className="App-like-icon"
           {...label}
           sx={{ color: "black" }}
           onChange={() => getAuthorQuotes(author)}
-          icon={<PersonSearchOutlinedIcon />}
+          /*icon={<PersonSearchOutlinedIcon />}*/
         />
       </CardContent>
     );
@@ -135,7 +135,7 @@ function Dashboard() {
         //     .then(function (response) {
         // TO-DO: Let new cards -> set cards is a new function
         console.log("Quotes fetched from backend:");
-        //console.log(response.data.results);
+        console.log(response.data.results);
         for (let a = 0; a < response.data.length; a++) {
           newCards.push(
             makeCard(
