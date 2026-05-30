@@ -3,12 +3,11 @@ import "./App.css";
 import { Button, Box } from "@mui/material/";
 import { TextField, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { firestore } from "./Firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./Firebase";
+import { createUserProfile } from "./services/userProfileService";
 
 function SignUp() {
-  const auth = getAuth();
   const navigate = useNavigate();
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -26,28 +25,24 @@ function SignUp() {
 
   async function SignUp_Home(email: string, password: string) {
     try {
-      const userCredential = createUserWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password,
       );
-      const user = (await userCredential).user;
-      const docRef = doc(firestore, "Users", email);
-      const data = {
-        uid: user.uid,
-        email: email,
-        password: password,
-        quotesID: [],
-      };
-
-      console.log(data.uid);
-      await setDoc(docRef, data);
+      const user = userCredential.user;
+      await createUserProfile(user.uid, email, name);
       navigate("/Login");
-    } catch (error: any) {
-      if (error.code == "auth/email-already-exists") {
+    } catch (error: unknown) {
+      const code =
+        typeof error === "object" && error !== null && "code" in error
+          ? String((error as { code?: unknown }).code)
+          : undefined;
+
+      if (code === "auth/email-already-in-use") {
         alert("This email is already in use.");
       }
-      console.log("Uh-oh");
+      console.log("Uh-oh", error);
     }
   }
   const SignUp_Btn_Click = () => {

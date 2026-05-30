@@ -3,7 +3,8 @@ import "./App.css";
 import Button from "@mui/material/Button";
 import { Link, TextField, Stack, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./Firebase";
 
 function Login() {
   const navigate = useNavigate();
@@ -20,7 +21,6 @@ function Login() {
     navigate("/Dashboard");
   };
 
-  const auth = getAuth();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
@@ -29,20 +29,25 @@ function Login() {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("Success");
       navigate("/Dashboard");
-    } catch (error: any) {
-      if (error.code === "auth/user-not-found") {
+    } catch (error: unknown) {
+      const code =
+        typeof error === "object" && error !== null && "code" in error
+          ? String((error as { code?: unknown }).code)
+          : undefined;
+
+      if (code === "auth/user-not-found") {
         alert("User not found");
         console.log("Invalid user");
       }
-      if (error.code === "auth/invalid-email") {
+      if (code === "auth/invalid-email") {
         alert("Email not found");
         console.log("Invalid email");
       }
-      if (error.code === "auth/invalid-login-credentials") {
+      if (code === "auth/invalid-login-credentials") {
         alert("Invalid login credentials");
         console.log("Invalid email");
       }
-      console.log(error.code);
+      console.log(code);
     }
   }
   const SignIn_Btn_Click = () => {

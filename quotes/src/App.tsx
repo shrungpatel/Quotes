@@ -1,10 +1,6 @@
+import { lazy, Suspense } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
-import Login from "./Login";
-import ForgotPassword from "./ForgotPassword";
-import SignUp from "./SignUp";
-import Dashboard from "./Dashboard";
-import Saved from "./Saved";
 import {
   Box,
   AppBar,
@@ -12,23 +8,25 @@ import {
   Container,
   Toolbar,
 } from "@mui/material";
-import { getAuth } from "firebase/auth";
+import RouteLoader from "./components/RouteLoader";
+import useLogout from "./hooks/useLogout";
+
+const Login = lazy(() => import("./Login"));
+const ForgotPassword = lazy(() => import("./ForgotPassword"));
+const SignUp = lazy(() => import("./SignUp"));
+const Dashboard = lazy(() => import("./Dashboard"));
+const Saved = lazy(() => import("./Saved"));
 
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
+  const logOut = useLogout();
 
   const goToDashboard = () => {
     navigate("/Dashboard");
   };
   const goToSaved = () => {
     navigate("/Saved");
-  };
-
-  const logOut = () => {
-    const auth = getAuth();
-    auth.signOut();
-    navigate("/Login");
   };
 
   const hideHeader =
@@ -94,14 +92,16 @@ function App() {
   return (
     <div className="App">
       {hideHeader}
-      <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/ForgotPassword" element={<ForgotPassword />} />
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/Saved" element={<Saved />} />
-      </Routes>
+      <Suspense fallback={<RouteLoader />}>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/Login" element={<Login />} />
+          <Route path="/ForgotPassword" element={<ForgotPassword />} />
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/Dashboard" element={<Dashboard />} />
+          <Route path="/Saved" element={<Saved />} />
+        </Routes>
+      </Suspense>
     </div>
   );
 }
