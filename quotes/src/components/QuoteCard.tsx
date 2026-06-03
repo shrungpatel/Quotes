@@ -1,5 +1,9 @@
 import { CardContent, Checkbox } from "@mui/material";
 import { pink } from "@mui/material/colors";
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ReportProblemIcon from '@mui/icons-material/ReportProblem';
+import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
 
 type QuoteCardProps = {
   content: string;
@@ -20,6 +24,8 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
         className="App-like-icon"
         inputProps={{ "aria-label": "Save quote" }}
         onChange={() => onLike(content, author)}
+        icon={<FavoriteBorderOutlinedIcon />}
+        checkedIcon={<FavoriteIcon />}
         sx={{
           color: pink[800],
           "&.Mui-checked": {
@@ -29,8 +35,10 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
       />
       <Checkbox
         className="App-like-icon"
-        inputProps={{ "aria-label": "Search by author" }}
-        sx={{ color: "black" }}
+        inputProps={{ "aria-label": "Report quote" }}
+        icon = {<ReportProblemOutlinedIcon />}
+        checkedIcon = {<ReportProblemIcon />}
+        sx={{ color: "red" }}
         onChange={() => onSearchAuthor(author)}
       />
     </CardContent>
