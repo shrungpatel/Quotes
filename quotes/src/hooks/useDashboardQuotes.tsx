@@ -28,11 +28,7 @@ function useDashboardQuotes() {
 
   const getAuthorQuotes = useCallback(
     async (author: string) => {
-      const url =
-        "https://api.quotable.io/search/quotes?query=" +
-        author +
-        "&fields=author";
-
+      const url = "http://localhost:5000/authorQuotes?author=" + author;
       try {
         const response = await axios.get(url);
         const quotes = response.data as AuthorQuote[];
@@ -66,7 +62,7 @@ function useDashboardQuotes() {
         setCards(
           quotes.map((quote) => (
             <QuoteCard
-              key={buildQuoteKey(quote.q, quote.a)}
+              //key={buildQuoteKey(quote.q, quote.a)}
               content={quote.q}
               author={quote.a}
               onLike={addQuote}

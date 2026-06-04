@@ -16,16 +16,20 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
   const displayContent =
     content.length < 150 ? content : `${content.substring(0, 150)}...`;
 
+    /*
+      icon = {<FavoriteBorderOutlinedIcon />}
+      checkedIcon = {<FavoriteIcon />}  
+      icon = {<ReportProblemOutlinedIcon />}
+      checkedIcon = {<ReportProblemIcon />}
+    */
   return (
     <CardContent className="App-Card">
       <h4>{displayContent}</h4>
       <p>{author}</p>
-      <Checkbox
+       <Checkbox
         className="App-like-icon"
-        inputProps={{ "aria-label": "Save quote" }}
+        slotProps={{ "aria-label": "Save quote" }}
         onChange={() => onLike(content, author)}
-        icon={<FavoriteBorderOutlinedIcon />}
-        checkedIcon={<FavoriteIcon />}
         sx={{
           color: pink[800],
           "&.Mui-checked": {
@@ -35,9 +39,8 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
       />
       <Checkbox
         className="App-like-icon"
-        inputProps={{ "aria-label": "Report quote" }}
-        icon = {<ReportProblemOutlinedIcon />}
-        checkedIcon = {<ReportProblemIcon />}
+        slotProps={{ "aria-label": "Report quote" }}
+        
         sx={{ color: "red" }}
         onChange={() => onSearchAuthor(author)}
       />
