@@ -1,9 +1,6 @@
 import { CardContent, Checkbox } from "@mui/material";
 import { pink } from "@mui/material/colors";
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import ReportProblemIcon from '@mui/icons-material/ReportProblem';
-import ReportProblemOutlinedIcon from '@mui/icons-material/ReportProblemOutlined';
+import { Favorite, FavoriteBorder, ReportProblem, ReportProblemOutlined } from "@mui/icons-material";
 
 type QuoteCardProps = {
   content: string;
@@ -13,22 +10,18 @@ type QuoteCardProps = {
 };
 
 function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) {
-  const displayContent =
-    content.length < 150 ? content : `${content.substring(0, 150)}...`;
-
-    /*
-      icon = {<FavoriteBorderOutlinedIcon />}
-      checkedIcon = {<FavoriteIcon />}  
-      icon = {<ReportProblemOutlinedIcon />}
-      checkedIcon = {<ReportProblemIcon />}
-    */
+  // when the database is ready, change it to show the full quote when the user clicks on it
+  //const displayContent =
+  //  content.length < 150 ? content : `${content.substring(0, 150)}...`;
+  const displayContent = content;
   return (
     <CardContent className="App-Card">
       <h4>{displayContent}</h4>
       <p>{author}</p>
        <Checkbox
         className="App-like-icon"
-        slotProps={{ "aria-label": "Save quote" }}
+        icon={<FavoriteBorder />}
+        checkedIcon={<Favorite />}
         onChange={() => onLike(content, author)}
         sx={{
           color: pink[800],
@@ -39,10 +32,13 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
       />
       <Checkbox
         className="App-like-icon"
-        slotProps={{ "aria-label": "Report quote" }}
-        
+        icon={<ReportProblemOutlined />}
+        checkedIcon={<ReportProblem />}        
         sx={{ color: "red" }}
         onChange={() => onSearchAuthor(author)}
+        sx={{
+          color: "red"
+        }}
       />
     </CardContent>
   );
