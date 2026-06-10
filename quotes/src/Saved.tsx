@@ -6,7 +6,7 @@ function Saved() {
   const { cards, loading } = useSavedQuotes();
 
   return loading ? (
-    <h1 className="middle">Loading (updated)...</h1>
+      <h1 className="middle">Loading...</h1>
   ) : (
     <Grid>
       <Card
