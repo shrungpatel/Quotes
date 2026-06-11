@@ -14,10 +14,16 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
   //const displayContent =
   //  content.length < 150 ? content : `${content.substring(0, 150)}...`;
   const displayContent = content;
+  const report = (content: string, author: string) => {
+    console.log(`Reported quote: "${content}" by ${author}`);
+  }
+
   return (
     <CardContent className="App-Card">
       <h4>{displayContent}</h4>
-      <p>{author}</p>
+      <p onClick={() => onSearchAuthor(author)} className="App-author">
+        {author}
+      </p>
        <Checkbox
         className="App-like-icon"
         icon={<FavoriteBorder />}
@@ -35,7 +41,7 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
         icon={<ReportProblemOutlined />}
         checkedIcon={<ReportProblem />}        
         sx={{ color: "red" }}
-        onChange={() => onSearchAuthor(author)}
+        onChange={() => report(content, author)}
         sx={{
           color: "red"
         }}
