@@ -40,7 +40,6 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
         className="App-like-icon"
         icon={<ReportProblemOutlined />}
         checkedIcon={<ReportProblem />}        
-        sx={{ color: "red" }}
         onChange={() => report(content, author)}
         sx={{
           color: "red"

@@ -1,18 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import QuoteCard from "../components/QuoteCard";
-import { buildQuoteKey } from "../utils/quoteKey";
 import useUserProfile from "./useUserProfile";
 
-type HomeQuote = {
-  q: string;
-  a: string;
+type QuoteRecord = {
+  id: string;
+  author: string;
+  likes: number;
+  message: string;
 };
 
 type AuthorQuote = {
-  content: string;
+  id: string;
   author: string;
-  _id: string;
+  likes: number;
+  message: string;
 };
 
 function useDashboardQuotes() {
@@ -36,8 +38,8 @@ function useDashboardQuotes() {
         setCards(
           quotes.map((quote) => (
             <QuoteCard
-              key={quote._id}
-              content={quote.content}
+              key={quote.id}
+              content={quote.message}
               author={quote.author}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
@@ -57,14 +59,14 @@ function useDashboardQuotes() {
     void (async () => {
       try {
         const response = await axios.get("http://localhost:5000/quotes");
-        const quotes = response.data as HomeQuote[];
+        const quotes = response.data as QuoteRecord[];
 
         setCards(
           quotes.map((quote) => (
             <QuoteCard
-              //key={buildQuoteKey(quote.q, quote.a)}
-              content={quote.q}
-              author={quote.a}
+              key={quote.id}
+              content={quote.message}
+              author={quote.author}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
             />
