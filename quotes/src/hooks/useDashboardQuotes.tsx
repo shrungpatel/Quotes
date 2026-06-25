@@ -5,14 +5,6 @@ import useUserProfile from "./useUserProfile";
 
 type QuoteRecord = {
   id: string;
-  author: string;
-  likes: number;
-  message: string;
-};
-
-type AuthorQuote = {
-  id: string;
-  author: string;
   likes: number;
   message: string;
 };
@@ -30,22 +22,22 @@ function useDashboardQuotes() {
 
   const getAuthorQuotes = useCallback(
     async (author: string) => {
-      const url = "http://localhost:5000/authorQuotes?author=" + author;
       try {
-        const response = await axios.get(url);
-        const quotes = response.data as AuthorQuote[];
-
-        setCards(
-          quotes.map((quote) => (
-            <QuoteCard
-              key={quote.id}
-              content={quote.message}
-              author={quote.author}
-              onLike={addQuote}
-              onSearchAuthor={getAuthorQuotes}
-            />
-          )),
+        const response = await axios.get(
+          `http://localhost:5000/authorQuotes?author=${encodeURIComponent(author)}`,
         );
+
+        const quote = response.data as QuoteRecord;
+
+        setCards([
+          <QuoteCard
+            key={quote.id}
+            content={quote.message}
+            author={quote.id}
+            onLike={addQuote}
+            onSearchAuthor={getAuthorQuotes}
+          />,
+        ]);
       } catch (error) {
         console.log(error);
       }
@@ -64,9 +56,9 @@ function useDashboardQuotes() {
         setCards(
           quotes.map((quote) => (
             <QuoteCard
-              key={quote.id}
+              key={`${quote.id}-${Math.random()}`}
               content={quote.message}
-              author={quote.author}
+              author={quote.id}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
             />
