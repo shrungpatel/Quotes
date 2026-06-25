@@ -14,13 +14,12 @@ admin.initializeApp({
   projectId: process.env.PROJECT_ID || serviceAccount.project_id
 });
 const db = admin.firestore();
-function normalizeQuote(doc) {
-    const data = doc.data() || {};
-
+function normalizeQuote(author, value) {
     return {
-        id: typeof data.id === "string" ? data.id : doc.id,
-        likes: typeof data.likes === "number" ? data.likes : 0,
-        message: typeof data.message === "string" ? data.message : "",
+        id: typeof value.id === "string" ? value.id : "",
+        author: author,
+        likes: typeof value.likes === "number" ? value.likes : 0,
+        message: typeof value.message === "string" ? value.message : "",
     };
 }
 
@@ -28,42 +27,49 @@ app.get("/quotes", async (req, res) => {
     try {
         const snapshot = await db.collection("Quotes").get();
 
-        const allQuotesPool = snapshot.docs
-            .map(normalizeQuote)
-            .filter((quote) => quote.id.length > 0 && quote.message.length > 0);
+        const allQuotesPool = [];
+
+        snapshot.forEach((doc) => {
+            const author = doc.id;
+            const data = doc.data();
+
+            Object.values(data).forEach((quote) => {
+                if (
+                    quote &&
+                    typeof quote === "object" &&
+                    quote.message
+                ) {
+                    allQuotesPool.push(normalizeQuote(author, quote));
+                }
+            });
+        });
 
         if (allQuotesPool.length === 0) {
             return res.status(404).json({
-                error: "No valid quotes found in Firestore."
+                error: "No valid quotes found.",
             });
         }
 
-        const TOTAL_QUOTES_NEEDED = 1000;
-
-        const selectedQuotes = Array.from(
-            { length: TOTAL_QUOTES_NEEDED },
-            () => allQuotesPool[Math.floor(Math.random() * allQuotesPool.length)]
+        const selectedQuotes = Array.from({ length: 1000 }, () =>
+            allQuotesPool[Math.floor(Math.random() * allQuotesPool.length)]
         );
 
         res.json(selectedQuotes);
-        console.log(res);
     } catch (error) {
-        console.error("Error retrieving batch quotes:", error.message);
+        console.error(error);
         res.status(500).json({
-            error: "Unable to fetch quotes batch"
+            error: "Unable to fetch quotes.",
         });
     }
 });
 
 app.get("/authorQuotes", async (req, res) => {
     try {
-        const author = typeof req.query.author === "string"
-            ? req.query.author.trim()
-            : "";
+        const author = req.query.author?.trim();
 
         if (!author) {
             return res.status(400).json({
-                error: "Missing author query parameter."
+                error: "Missing author.",
             });
         }
 
@@ -71,23 +77,19 @@ app.get("/authorQuotes", async (req, res) => {
 
         if (!doc.exists) {
             return res.status(404).json({
-                error: "Author not found."
+                error: "Author not found.",
             });
         }
 
-        const quote = normalizeQuote(doc);
+        const quotes = Object.values(doc.data())
+            .filter((quote) => quote && typeof quote === "object")
+            .map((quote) => normalizeQuote(author, quote));
 
-        if (!quote.message) {
-            return res.status(404).json({
-                error: "No quote found for author."
-            });
-        }
-
-        res.json(quote);
+        res.json(quotes);
     } catch (error) {
-        console.error("Error retrieving author quote:", error.message);
+        console.error(error);
         res.status(500).json({
-            error: "Unable to fetch author quote"
+            error: "Unable to fetch author quotes.",
         });
     }
 });

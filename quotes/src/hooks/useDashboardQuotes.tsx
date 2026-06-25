@@ -5,9 +5,12 @@ import useUserProfile from "./useUserProfile";
 
 type QuoteRecord = {
   id: string;
+  author: string;
   likes: number;
   message: string;
 };
+
+type AuthorQuote = QuoteRecord;
 
 function useDashboardQuotes() {
   const { saveQuote } = useUserProfile();
@@ -33,7 +36,7 @@ function useDashboardQuotes() {
           <QuoteCard
             key={quote.id}
             content={quote.message}
-            author={quote.id}
+            author={author}
             onLike={addQuote}
             onSearchAuthor={getAuthorQuotes}
           />,
@@ -58,7 +61,7 @@ function useDashboardQuotes() {
             <QuoteCard
               key={`${quote.id}-${Math.random()}`}
               content={quote.message}
-              author={quote.id}
+              author={quote.author}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
             />
