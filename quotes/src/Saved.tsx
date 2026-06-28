@@ -1,4 +1,4 @@
-import { Card, Grid } from "@mui/material";
+import { Box, Card, Grid } from "@mui/material";
 import "./App.css";
 import useSavedQuotes from "./hooks/useSavedQuotes";
 
@@ -8,20 +8,25 @@ function Saved() {
   return loading ? (
       <h1 className="middle">Loading...</h1>
   ) : (
-    <Grid>
-      <Card
-        className="App-newBackground"
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignContent: "center",
-          justifyContent: "center",
-          height: "100vh" /* takes up the entire screen */,
-        }}
-      >
-        {cards}
-      </Card>
-    </Grid>
+    <Box>
+      <title>Saved</title>
+      <Grid className="App-newBackground">
+        <div>
+          <br></br>
+        </div>
+        <Card
+          className="App-newBackground"
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignContent: "center",
+            justifyContent: "center",
+          }}
+        >
+          {cards}
+        </Card>
+      </Grid>
+    </Box>
   );
 }
 export default Saved;
