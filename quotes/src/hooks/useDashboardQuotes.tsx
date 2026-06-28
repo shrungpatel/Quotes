@@ -30,17 +30,19 @@ function useDashboardQuotes() {
           `http://localhost:5000/authorQuotes?author=${encodeURIComponent(author)}`,
         );
 
-        const quote = response.data as QuoteRecord;
-
-        setCards([
-          <QuoteCard
-            key={quote.id}
-            content={quote.message}
-            author={author}
-            onLike={addQuote}
-            onSearchAuthor={getAuthorQuotes}
-          />,
-        ]);
+        const quotes = response.data as QuoteRecord[];
+        
+        setCards(
+          quotes.map((quote) => (
+            <QuoteCard
+              key={quote.id}
+              content={quote.message}
+              author={author}
+              onLike={addQuote}
+              onSearchAuthor={getAuthorQuotes}
+            />
+          ))
+        );
       } catch (error) {
         console.log(error);
       }
