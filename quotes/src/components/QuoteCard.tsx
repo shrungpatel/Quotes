@@ -7,16 +7,14 @@ type QuoteCardProps = {
   author: string;
   onLike: (content: string, author: string) => void;
   onSearchAuthor: (author: string) => void;
+  onReportQuote: (content: string, author: string) => void;
 };
 
-function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) {
+function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: QuoteCardProps) {
   // when the database is ready, change it to show the full quote when the user clicks on it
   //const displayContent =
   //  content.length < 150 ? content : `${content.substring(0, 150)}...`;
   const displayContent = content;
-  const report = (content: string, author: string) => {
-    console.log(`Reported quote: "${content}" by ${author}`);
-  }
 
   return (
     <CardContent className="App-Card">
@@ -40,9 +38,12 @@ function QuoteCard({ content, author, onLike, onSearchAuthor }: QuoteCardProps) 
         className="App-like-icon"
         icon={<ReportProblemOutlined />}
         checkedIcon={<ReportProblem />}        
-        onChange={() => report(content, author)}
+        onChange={() => onReportQuote(content, author)}
         sx={{
-          color: "red"
+          color: "red",
+          "&.Mui-checked": {
+            color: "red"
+          }
         }}
       />
     </CardContent>

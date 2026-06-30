@@ -13,7 +13,7 @@ type QuoteRecord = {
 type AuthorQuote = QuoteRecord;
 
 function useDashboardQuotes() {
-  const { saveQuote } = useUserProfile();
+  const { saveQuote, reportQuote } = useUserProfile();
   const [cards, setCards] = useState<JSX.Element[]>([]);
 
   const addQuote = useCallback(
@@ -21,6 +21,13 @@ function useDashboardQuotes() {
       await saveQuote(content, author);
     },
     [saveQuote],
+  );
+
+  const reportQuoteRequest = useCallback(
+    async (content: string, author: string) => {
+      await reportQuote(content, author);
+    },
+    [reportQuote],
   );
 
   const getAuthorQuotes = useCallback(
@@ -40,6 +47,7 @@ function useDashboardQuotes() {
               author={author}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
+              onReportQuote={reportQuoteRequest}
             />
           ))
         );
@@ -66,6 +74,7 @@ function useDashboardQuotes() {
               author={quote.author}
               onLike={addQuote}
               onSearchAuthor={getAuthorQuotes}
+              onReportQuote={reportQuoteRequest}
             />
           )),
         );

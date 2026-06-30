@@ -15,6 +15,7 @@ export type UserProfileRecord = {
   email: string;
   name?: string;
   quotesID: Record<string, string>;
+  reportedQuotes: Record<string, string>;
 };
 
 type UserProfileDocument = {
@@ -44,6 +45,7 @@ async function getUserProfileDocumentByEmail(
       email: data.email,
       name: data.name,
       quotesID: data.quotesID ?? {},
+      reportedQuotes: data.reportedQuotes ?? {}
     },
   };
 }
@@ -71,6 +73,25 @@ export async function saveQuoteForUser(
 
   await updateDoc(document.ref, {
     quotesID: Object.fromEntries(nextQuotes),
+  });
+}
+
+export async function reportQuoteForUser(
+  email: string,
+  content: string,
+  author: string,
+): Promise<void> {
+  const document = await getUserProfileDocumentByEmail(email);
+
+  if (document == null) {
+    return;
+  }
+
+  const quotesReported = new Map(Object.entries(document.profile.reportedQuotes));
+  quotesReported.set(content, author);
+
+  await updateDoc(document.ref, {
+    reportedQuotes: Object.fromEntries(quotesReported),
   });
 }
 

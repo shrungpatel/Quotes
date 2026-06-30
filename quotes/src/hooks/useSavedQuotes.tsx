@@ -6,7 +6,11 @@ function useSavedQuotes() {
   const { profile, loading: profileLoading } = useUserProfile();
   const cards = useMemo(() => {
     if (profileLoading) {
-      return [];
+      return <SavedQuoteCard
+        key="1"
+        content="You need to be signed in to save quotes"
+        author="_"
+      />
     }
 
     return Object.entries(profile?.quotesID ?? {}).map(

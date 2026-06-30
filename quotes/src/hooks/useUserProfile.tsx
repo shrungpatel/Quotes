@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import useAuthUser from "./useAuthUser";
 import {
   getUserProfileByEmail,
+  reportQuoteForUser,
   saveQuoteForUser,
   type UserProfileRecord,
 } from "../services/userProfileService";
@@ -47,10 +48,22 @@ function useUserProfile() {
     [email],
   );
 
+  const reportQuote = useCallback(
+    async (content: string, author: string) => {
+      if (email == null) {
+        return;
+      }
+
+      await reportQuoteForUser(email, content, author);
+    },
+    [email],
+  );
+
   return {
     profile,
     loading,
     saveQuote,
+    reportQuote
   };
 }
 
