@@ -50,7 +50,7 @@ app.get("/quotes", async (req, res) => {
             });
         }
 
-        const selectedQuotes = Array.from({ length: 1000 }, () =>
+        const selectedQuotes = Array.from({ length: 100 }, () =>
             allQuotesPool[Math.floor(Math.random() * allQuotesPool.length)]
         );
 

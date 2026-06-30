@@ -3,13 +3,12 @@ import "./App.css";
 import useSavedQuotes from "./hooks/useSavedQuotes";
 
 function Saved() {
+  document.title = "Saved";
   const { cards, loading } = useSavedQuotes();
-
   return loading ? (
       <h1 className="middle">Loading...</h1>
   ) : (
     <Box>
-      <title>Saved</title>
       <Grid className="App-newBackground">
         <div>
           <br></br>
