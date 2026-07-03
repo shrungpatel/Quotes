@@ -15,6 +15,7 @@ const REPORT_REASONS = [
   "Offensive or hateful content",
   "Spam or misleading",
   "Incorrect attribution",
+  "Mistake",
   "Other",
 ];
 
@@ -76,9 +77,11 @@ function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: Q
         }}
       />
       
-      <Dialog open={reportDialogOpen} onClose={handleReportCancel} maxWidth="sm" fullWidth>
+      <Dialog PaperProps={{ className: "App-Report-Dialog" }} open={reportDialogOpen} onClose={handleReportCancel} maxWidth="sm" fullWidth>
         <DialogTitle>Report Quote</DialogTitle>
         <DialogContent>
+          <p>"{content}"</p>
+          <p>Author: {author}</p>
           <FormControl fullWidth sx={{ mt: 2, mb: 2 }}>
             <InputLabel>Reason for reporting</InputLabel>
             <Select
