@@ -1,6 +1,7 @@
-import { CardContent, Checkbox } from "@mui/material";
+import { CardContent, Checkbox, Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { pink } from "@mui/material/colors";
 import { Favorite, FavoriteBorder, ReportProblem, ReportProblemOutlined } from "@mui/icons-material";
+import { useState } from "react";
 
 type QuoteCardProps = {
   content: string;
@@ -10,11 +11,39 @@ type QuoteCardProps = {
   onReportQuote: (content: string, author: string) => void;
 };
 
+const REPORT_REASONS = [
+  "Offensive or hateful content",
+  "Spam or misleading",
+  "Incorrect attribution",
+  "Other",
+];
+
 function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: QuoteCardProps) {
+  const [reportDialogOpen, setReportDialogOpen] = useState(false);
+  const [reportReason, setReportReason] = useState("");
+  const [reportDetails, setReportDetails] = useState("");
+
   // when the database is ready, change it to show the full quote when the user clicks on it
   //const displayContent =
   //  content.length < 150 ? content : `${content.substring(0, 150)}...`;
   const displayContent = content;
+
+  const handleReportClick = () => {
+    setReportDialogOpen(true);
+  };
+
+  const handleReportCancel = () => {
+    setReportDialogOpen(false);
+    setReportReason("");
+    setReportDetails("");
+  };
+
+  const handleReportConfirm = async () => {
+    await onReportQuote(content, author);
+    setReportDialogOpen(false);
+    setReportReason("");
+    setReportDetails("");
+  };
 
   return (
     <CardContent className="App-Card">
@@ -38,7 +67,7 @@ function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: Q
         className="App-like-icon"
         icon={<ReportProblemOutlined />}
         checkedIcon={<ReportProblem />}        
-        onChange={() => onReportQuote(content, author)}
+        onChange={handleReportClick}
         sx={{
           color: "red",
           "&.Mui-checked": {
@@ -46,6 +75,41 @@ function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: Q
           }
         }}
       />
+      
+      <Dialog open={reportDialogOpen} onClose={handleReportCancel} maxWidth="sm" fullWidth>
+        <DialogTitle>Report Quote</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth sx={{ mt: 2, mb: 2 }}>
+            <InputLabel>Reason for reporting</InputLabel>
+            <Select
+              value={reportReason}
+              label="Reason for reporting"
+              onChange={(e) => setReportReason(e.target.value)}
+            >
+              {REPORT_REASONS.map((reason) => (
+                <MenuItem key={reason} value={reason}>
+                  {reason}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+          <TextField
+            fullWidth
+            multiline
+            rows={4}
+            label="Additional details (optional)"
+            value={reportDetails}
+            onChange={(e) => setReportDetails(e.target.value)}
+            placeholder="Provide any additional information about why you're reporting this quote..."
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleReportCancel}>Cancel</Button>
+          <Button onClick={handleReportConfirm} variant="contained" color="error">
+            Report
+          </Button>
+        </DialogActions>
+      </Dialog>
     </CardContent>
   );
 }
