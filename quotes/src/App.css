@@ -88,12 +88,14 @@
 }
 
 .App-Report-Dialog {
-  background-color: rgba(255, 255, 255, 0.45);
+  background-color: rgba(255, 255, 255, 0.8) !important;
   box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.25);
+  /*background-image: url(https://media.istockphoto.com/id/931318336/photo/holographic-foil-blurred-abstract-background-for-trendy-design.webp?b=1&s=170667a&w=0&k=20&c=W9-CaRSZSySq_W7d0RShegjpwpr3TsK6zyzfD3Znd48=) center / cover no-repeat fixed !important;*/
 
   backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
 
-  border: #ffccff solid 2.5px;
+  border: 2.5px solid #ffccff;
   border-radius: 20px;
   margin: 2px;
   margin-right: 10px;
