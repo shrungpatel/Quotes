@@ -1,6 +1,7 @@
 import {
   collection,
   doc,
+  getDoc,
   getDocs,
   query,
   setDoc,
@@ -21,6 +22,13 @@ export type UserProfileRecord = {
 type UserProfileDocument = {
   ref: DocumentReference;
   profile: UserProfileRecord;
+};
+
+type ReportedQuoteRecord = {
+  content: string;
+  author: string;
+  reportedBy: string[];
+  reportCount: number;
 };
 
 async function getUserProfileDocumentByEmail(
@@ -93,6 +101,31 @@ export async function reportQuoteForUser(
   await updateDoc(document.ref, {
     reportedQuotes: Object.fromEntries(quotesReported),
   });
+
+  const reportDocId = `${author}::${encodeURIComponent(content)}`;
+  const reportDocRef = doc(db, "Reported", reportDocId);
+  const reportDoc = await getDoc(reportDocRef);
+
+  if (reportDoc.exists()) {
+    const existingReport = reportDoc.data() as ReportedQuoteRecord;
+    const reportedBy = existingReport.reportedBy ?? [];
+    const nextReportedBy = reportedBy.includes(email)
+      ? reportedBy
+      : [...reportedBy, email];
+
+    await updateDoc(reportDocRef, {
+      reportedBy: nextReportedBy,
+      reportCount: nextReportedBy.length,
+    });
+    return;
+  }
+
+  await setDoc(reportDocRef, {
+    content,
+    author,
+    reportedBy: [email],
+    reportCount: 1,
+  });
 }
 
 export async function createUserProfile(
@@ -105,5 +138,6 @@ export async function createUserProfile(
     email,
     name,
     quotesID: {},
+    reportedQuotes: {},
   });
 }

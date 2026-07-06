@@ -10,8 +10,6 @@ type QuoteRecord = {
   message: string;
 };
 
-type AuthorQuote = QuoteRecord;
-
 function useDashboardQuotes() {
   const { saveQuote, reportQuote } = useUserProfile();
   const [cards, setCards] = useState<JSX.Element[]>([]);
