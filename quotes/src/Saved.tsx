@@ -1,10 +1,10 @@
-import { Box, Card, Grid } from "@mui/material";
+import { Box, Button, Card, Grid } from "@mui/material";
 import "./App.css";
 import useSavedQuotes from "./hooks/useSavedQuotes";
 
 function Saved() {
   document.title = "Saved";
-  const { cards, loading } = useSavedQuotes();
+  const { cards, loading, authorFilter, clearAuthorFilter } = useSavedQuotes();
   return loading ? (
       <h1 className="middle">Loading...</h1>
   ) : (
@@ -22,6 +22,13 @@ function Saved() {
             justifyContent: "center",
           }}
         >
+          {authorFilter !== "" && (
+            <Box sx={{ width: "100%", display: "flex", justifyContent: "center", mt: 2 }}>
+              <Button variant="outlined" onClick={clearAuthorFilter}>
+                Clear author filter
+              </Button>
+            </Box>
+          )}
           {cards}
         </Card>
       </Grid>

@@ -10,6 +10,10 @@ function useSavedQuotes() {
     setAuthorFilter((currentAuthor) => (currentAuthor === author ? "" : author));
   }, []);
 
+  const clearAuthorFilter = useCallback(() => {
+    setAuthorFilter("");
+  }, []);
+
   const cards = useMemo(() => {
     if (profileLoading) {
       return <SavedQuoteCard
@@ -44,7 +48,7 @@ function useSavedQuotes() {
       ));
   }, [authorFilter, handleSearchAuthor, profile, profileLoading, reportQuote, unlikeQuote]);
 
-  return { cards, loading: profileLoading, authorFilter };
+  return { cards, loading: profileLoading, authorFilter, clearAuthorFilter };
 }
 
 export default useSavedQuotes;
