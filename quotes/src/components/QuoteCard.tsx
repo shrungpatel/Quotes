@@ -9,6 +9,7 @@ type QuoteCardProps = {
   onLike: (content: string, author: string) => void;
   onSearchAuthor: (author: string) => void;
   onReportQuote: (content: string, author: string) => void;
+  defaultLiked?: boolean;
 };
 
 const REPORT_REASONS = [
@@ -19,7 +20,14 @@ const REPORT_REASONS = [
   "Other",
 ];
 
-function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: QuoteCardProps) {
+function QuoteCard({
+  content,
+  author,
+  onLike,
+  onSearchAuthor,
+  onReportQuote,
+  defaultLiked = false,
+}: QuoteCardProps) {
   const [reportDialogOpen, setReportDialogOpen] = useState(false);
   const [reportReason, setReportReason] = useState("");
   const [reportDetails, setReportDetails] = useState("");
@@ -52,8 +60,9 @@ function QuoteCard({ content, author, onLike, onSearchAuthor, onReportQuote }: Q
       <p onClick={() => onSearchAuthor(author)} className="App-author">
         {author}
       </p>
-       <Checkbox
+      <Checkbox
         className="App-like-icon"
+        defaultChecked={defaultLiked}
         icon={<FavoriteBorder />}
         checkedIcon={<Favorite />}
         onChange={() => onLike(content, author)}

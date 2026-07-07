@@ -84,6 +84,24 @@ export async function saveQuoteForUser(
   });
 }
 
+export async function removeSavedQuoteForUser(
+  email: string,
+  content: string,
+): Promise<void> {
+  const document = await getUserProfileDocumentByEmail(email);
+
+  if (document == null) {
+    return;
+  }
+
+  const nextQuotes = new Map(Object.entries(document.profile.quotesID));
+  nextQuotes.delete(content);
+
+  await updateDoc(document.ref, {
+    quotesID: Object.fromEntries(nextQuotes),
+  });
+}
+
 export async function reportQuoteForUser(
   email: string,
   content: string,
