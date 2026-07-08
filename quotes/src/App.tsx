@@ -63,13 +63,24 @@ function App() {
                   </Button>
                   {/* 1px solid #ccc for the search bar*/}
                   <input
-                    className="App-seach"
+                    className="App-search"
                     type="search"
                     placeholder="Search here"
                     style={{
                       borderRadius: "20px",
                       border: "none",
                       padding: "8px",
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        const searchValue = (e.target as HTMLInputElement).value;
+                        if (location.pathname === "/Dashboard") {
+                          navigate(`/Dashboard?search=${searchValue}`);
+                        }
+                        else if (location.pathname === "/Saved") {
+                          navigate(`/Saved?search=${searchValue}`);
+                        }
+                      }
                     }}
                   />
                   <Button
