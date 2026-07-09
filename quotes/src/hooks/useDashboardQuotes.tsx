@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
+import { useSearchParams } from "react-router-dom";
 import QuoteCard from "../components/QuoteCard";
 import useUserProfile from "./useUserProfile";
 
@@ -13,6 +14,8 @@ type QuoteRecord = {
 function useDashboardQuotes() {
   const { saveQuote, reportQuote } = useUserProfile();
   const [cards, setCards] = useState<JSX.Element[]>([]);
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search")?.trim() ?? "";
 
   const addQuote = useCallback(
     async (content: string, author: string) => {
@@ -53,36 +56,54 @@ function useDashboardQuotes() {
         console.log(error);
       }
     },
-    [addQuote],
+    [addQuote, reportQuoteRequest],
+  );
+
+  const renderQuoteCards = useCallback(
+    (quotes: QuoteRecord[]) => {
+      setCards(
+        quotes.map((quote) => (
+          <QuoteCard
+            key={`${quote.id}-${quote.message}`}
+            content={quote.message}
+            author={quote.author}
+            onLike={addQuote}
+            onSearchAuthor={getAuthorQuotes}
+            onReportQuote={reportQuoteRequest}
+          />
+        )),
+      );
+    },
+    [addQuote, getAuthorQuotes, reportQuoteRequest],
+  );
+
+  const loadDashboardQuotes = useCallback(
+    async (query: string) => {
+      try {
+        const endpoint = query.length > 0
+          ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
+          : "http://localhost:5000/quotes";
+        const response = await axios.get(endpoint);
+        renderQuoteCards(response.data as QuoteRecord[]);
+      } catch (error) {
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+          setCards([]);
+          return;
+        }
+
+        console.log("Error fetching quotes from frontend:", error);
+        setCards([]);
+      }
+    },
+    [renderQuoteCards],
   );
 
   useEffect(() => {
     document.title = "Home";
+    void loadDashboardQuotes(searchTerm);
+  }, [loadDashboardQuotes, searchTerm]);
 
-    void (async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/quotes");
-        const quotes = response.data as QuoteRecord[];
-
-        setCards(
-          quotes.map((quote) => (
-            <QuoteCard
-              key={`${quote.id}-${Math.random()}`}
-              content={quote.message}
-              author={quote.author}
-              onLike={addQuote}
-              onSearchAuthor={getAuthorQuotes}
-              onReportQuote={reportQuoteRequest}
-            />
-          )),
-        );
-      } catch (error) {
-        console.log("Error fetching quotes from frontend:", error);
-      }
-    })();
-  }, [addQuote, getAuthorQuotes]);
-
-  return { cards, getAuthorQuotes };
+  return { cards, getAuthorQuotes, searchTerm };
 }
 
 export default useDashboardQuotes;

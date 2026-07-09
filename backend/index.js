@@ -23,6 +23,19 @@ function normalizeQuote(author, value) {
     };
 }
 
+function matchesSearchTerm(quote, searchTerm) {
+    const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+
+    if (!normalizedSearchTerm) {
+        return true;
+    }
+
+    return (
+        quote.message.toLowerCase().includes(normalizedSearchTerm) ||
+        quote.author.toLowerCase().includes(normalizedSearchTerm)
+    );
+}
+
 app.get("/quotes", async (req, res) => {
     try {
         const snapshot = await db.collection("Quotes").get();
@@ -90,6 +103,44 @@ app.get("/authorQuotes", async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Unable to fetch author quotes.",
+        });
+    }
+});
+
+app.get("/searchQuotes", async (req, res) => {
+    try {
+        const searchTerm = (req.query.search ?? req.query.searchTerm ?? "").trim();
+        if (!searchTerm) {
+            return res.status(400).json({
+                error: "Missing search term.",
+            });
+        }
+        const snapshot = await db.collection("Quotes").get();
+        const matchingQuotes = [];
+        snapshot.forEach((doc) => {
+            const author = doc.id;
+            const data = doc.data();
+            Object.values(data).forEach((quote) => {
+                if (
+                    quote &&
+                    typeof quote === "object" &&
+                    quote.message &&
+                    matchesSearchTerm(normalizeQuote(author, quote), searchTerm)
+                ) {
+                    matchingQuotes.push(normalizeQuote(author, quote));
+                }
+            });
+        });
+        if (matchingQuotes.length === 0) {
+            return res.status(404).json({
+                error: "No matching quotes found.",
+            });
+        }
+        res.json(matchingQuotes);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Unable to search quotes.",
         });
     }
 });

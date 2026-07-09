@@ -1,10 +1,13 @@
 import { useCallback, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import SavedQuoteCard from "../components/SavedQuoteCard";
 import useUserProfile from "./useUserProfile";
 
 function useSavedQuotes() {
   const { profile, loading: profileLoading, unlikeQuote, reportQuote } = useUserProfile();
   const [authorFilter, setAuthorFilter] = useState("");
+  const [searchParams] = useSearchParams();
+  const searchTerm = searchParams.get("search")?.trim().toLowerCase() ?? "";
 
   const handleSearchAuthor = useCallback((author: string) => {
     setAuthorFilter((currentAuthor) => (currentAuthor === author ? "" : author));
@@ -27,7 +30,17 @@ function useSavedQuotes() {
     }
 
     return Object.entries(profile?.quotesID ?? {})
-      .filter(([, author]) => {
+      .filter(([content, author]) => {
+        if (searchTerm.length > 0) {
+          const matchesSearch =
+            content.toLowerCase().includes(searchTerm) ||
+            author.toLowerCase().includes(searchTerm);
+
+          if (!matchesSearch) {
+            return false;
+          }
+        }
+
         if (authorFilter === "") {
           return true;
         }
@@ -46,9 +59,9 @@ function useSavedQuotes() {
           author={author}
         />
       ));
-  }, [authorFilter, handleSearchAuthor, profile, profileLoading, reportQuote, unlikeQuote]);
+  }, [authorFilter, handleSearchAuthor, profile, profileLoading, reportQuote, searchTerm, unlikeQuote]);
 
-  return { cards, loading: profileLoading, authorFilter, clearAuthorFilter };
+  return { cards, loading: profileLoading, authorFilter, clearAuthorFilter, searchTerm };
 }
 
 export default useSavedQuotes;
