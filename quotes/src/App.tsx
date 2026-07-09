@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import {
@@ -21,6 +21,12 @@ function App() {
   const location = useLocation();
   const navigate = useNavigate();
   const logOut = useLogout();
+  const currentSearchTerm = new URLSearchParams(location.search).get("search") ?? "";
+  const [searchValue, setSearchValue] = useState(currentSearchTerm);
+
+  useEffect(() => {
+    setSearchValue(currentSearchTerm);
+  }, [currentSearchTerm]);
 
   const goToDashboard = () => {
     navigate("/Dashboard");
@@ -66,14 +72,17 @@ function App() {
                     className="App-search"
                     type="search"
                     placeholder="Search here"
+                    value={searchValue}
                     style={{
                       borderRadius: "20px",
                       border: "none",
                       padding: "8px",
                     }}
+                    onChange={(e) => {
+                      setSearchValue(e.target.value);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
-                        const searchValue = (e.target as HTMLInputElement).value;
                         if (location.pathname === "/Dashboard") {
                           navigate(`/Dashboard?search=${encodeURIComponent(searchValue)}`);
                         }
