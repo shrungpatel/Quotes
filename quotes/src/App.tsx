@@ -75,10 +75,10 @@ function App() {
                       if (e.key === "Enter") {
                         const searchValue = (e.target as HTMLInputElement).value;
                         if (location.pathname === "/Dashboard") {
-                          navigate(`/Dashboard?search=${searchValue}`);
+                          navigate(`/Dashboard?search=${encodeURIComponent(searchValue)}`);
                         }
                         else if (location.pathname === "/Saved") {
-                          navigate(`/Saved?search=${searchValue}`);
+                          navigate(`/Saved?search=${encodeURIComponent(searchValue)}`);
                         }
                       }
                     }}
@@ -109,8 +109,8 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/ForgotPassword" element={<ForgotPassword />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/Dashboard" element={<Dashboard />} />
-          <Route path="/Saved" element={<Saved />} />
+          <Route path="/Dashboard" element={<Dashboard key={location.search} />} />
+          <Route path="/Saved" element={<Saved key={location.search} />} />
         </Routes>
       </Suspense>
     </div>
