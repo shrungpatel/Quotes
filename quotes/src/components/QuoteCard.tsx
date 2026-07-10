@@ -76,7 +76,8 @@ function QuoteCard({
       <Checkbox
         className="App-like-icon"
         icon={<ReportProblemOutlined />}
-        checkedIcon={<ReportProblem />}        
+        checkedIcon={<ReportProblem />}    
+        checked={reportReason !== ""}   
         onChange={handleReportClick}
         sx={{
           color: "red",
