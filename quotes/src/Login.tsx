@@ -8,6 +8,7 @@ import { auth } from "./Firebase";
 
 function Login() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   const forgotClick = () => {
     navigate("/ForgotPassword");
@@ -34,20 +35,16 @@ function Login() {
         typeof error === "object" && error !== null && "code" in error
           ? String((error as { code?: unknown }).code)
           : undefined;
-
+      
       if (code === "auth/user-not-found") {
-        alert("User not found");
-        console.log("Invalid user");
+        setError("User not found");
       }
       if (code === "auth/invalid-email") {
-        alert("Email not found");
-        console.log("Invalid email");
+        setError("Email not found");
       }
       if (code === "auth/invalid-login-credentials") {
-        alert("Invalid login credentials");
-        console.log("Invalid email");
+        setError("Invalid login credentials");
       }
-      console.log(code);
     }
   }
   const SignIn_Btn_Click = () => {
@@ -112,6 +109,9 @@ function Login() {
           <Button onClick={signin} variant="contained" className="App-button">
             Continue as a guest
           </Button>
+          <div>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+          </div>
         </Box>
       </header>
     </div>
