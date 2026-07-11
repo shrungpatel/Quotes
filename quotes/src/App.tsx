@@ -76,7 +76,7 @@ function App() {
                     style={{
                       borderRadius: "20px",
                       border: "none",
-                      padding: "8px",
+                      padding: "8px"
                     }}
                     onChange={(e) => {
                       setSearchValue(e.target.value);

@@ -39,7 +39,7 @@ function useDashboardQuotes() {
         );
 
         const quotes = response.data as QuoteRecord[];
-        
+
         setCards(
           quotes.map((quote) => (
             <QuoteCard
@@ -50,7 +50,7 @@ function useDashboardQuotes() {
               onSearchAuthor={getAuthorQuotes}
               onReportQuote={reportQuoteRequest}
             />
-          ))
+          )),
         );
       } catch (error) {
         console.log(error);
@@ -80,19 +80,14 @@ function useDashboardQuotes() {
   const loadDashboardQuotes = useCallback(
     async (query: string) => {
       try {
-        const endpoint = query.length > 0
-          ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
-          : "http://localhost:5000/quotes";
+        const endpoint =
+          query.length > 0
+            ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
+            : "http://localhost:5000/quotes";
         const response = await axios.get(endpoint);
         renderQuoteCards(response.data as QuoteRecord[]);
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 404) {
-          setCards([]);
-          return;
-        }
-
-        console.log("Error fetching quotes from frontend:", error);
-        setCards([]);
+        setCards([<p style={{ color: "red" }}>Error fetching quotes</p>]);
       }
     },
     [renderQuoteCards],
