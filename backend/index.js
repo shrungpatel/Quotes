@@ -1,11 +1,14 @@
 const express = require("express");
 const cors = require("cors");
 const admin = require("firebase-admin");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(express.json());
 
 const serviceAccount = require("./serviceAccountKey.json");
 
@@ -14,6 +17,29 @@ admin.initializeApp({
   projectId: process.env.PROJECT_ID || serviceAccount.project_id
 });
 const db = admin.firestore();
+
+function getFirebaseApiKey() {
+    if (process.env.FIREBASE_API_KEY) {
+        return process.env.FIREBASE_API_KEY;
+    }
+
+    if (process.env.VITE_FIREBASE_API_KEY) {
+        return process.env.VITE_FIREBASE_API_KEY;
+    }
+
+    const envPath = path.join(__dirname, "../quotes/.env");
+    if (!fs.existsSync(envPath)) {
+        return "";
+    }
+
+    const envFile = fs.readFileSync(envPath, "utf8");
+    const apiKeyLine = envFile
+        .split(/\r?\n/)
+        .find((line) => line.startsWith("VITE_FIREBASE_API_KEY="));
+
+    return apiKeyLine?.split("=").slice(1).join("=").trim() ?? "";
+}
+
 function normalizeQuote(author, value) {
     return {
         id: typeof value.id === "string" ? value.id : "",
@@ -35,6 +61,65 @@ function matchesSearchTerm(quote, searchTerm) {
         quote.author.toLowerCase().includes(normalizedSearchTerm)
     );
 }
+
+app.post("/forgotPassword", async (req, res) => {
+    const email = typeof req.body?.email === "string" ? req.body.email.trim() : "";
+
+    if (!email) {
+        return res.status(400).json({
+            error: "Email is required.",
+        });
+    }
+
+    const firebaseApiKey = getFirebaseApiKey();
+
+    if (!firebaseApiKey) {
+        return res.status(500).json({
+            error: "Firebase API key is not configured.",
+        });
+    }
+
+    try {
+        const response = await fetch(
+            `https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${firebaseApiKey}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    requestType: "PASSWORD_RESET",
+                    email,
+                }),
+            },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            const message = data?.error?.message;
+
+            if (message === "INVALID_EMAIL") {
+                return res.status(400).json({
+                    error: "Please enter a valid email address.",
+                });
+            }
+
+            if (message !== "EMAIL_NOT_FOUND") {
+                throw new Error(message || "Unable to send password reset email.");
+            }
+        }
+
+        res.json({
+            message: "If an account exists for that email, a password reset email has been sent.",
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Unable to send password reset email.",
+        });
+    }
+});
 
 app.get("/quotes", async (req, res) => {
     try {
