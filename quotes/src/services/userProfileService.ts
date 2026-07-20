@@ -25,11 +25,32 @@ type UserProfileDocument = {
 };
 
 type ReportedQuoteRecord = {
+  id?: string;
   content: string;
   author: string;
   reportedBy: string[];
   reportCount: number;
 };
+
+type QuoteRecord = {
+  id?: string;
+  message?: string;
+};
+
+async function getQuoteId(author: string, content: string): Promise<string | null> {
+  const quoteDoc = await getDoc(doc(db, "Quotes", author));
+
+  if (!quoteDoc.exists()) {
+    return null;
+  }
+
+  const quotes = Object.values(quoteDoc.data()) as QuoteRecord[];
+  const matchingQuote = quotes.find(
+    (quote) => quote?.message === content && typeof quote.id === "string",
+  );
+
+  return matchingQuote?.id ?? null;
+}
 
 async function getUserProfileDocumentByEmail(
   email: string,
@@ -122,7 +143,10 @@ export async function reportQuoteForUser(
 
   const reportDocId = `${author}::${encodeURIComponent(content)}`;
   const reportDocRef = doc(db, "Reported", reportDocId);
-  const reportDoc = await getDoc(reportDocRef);
+  const [quoteId, reportDoc] = await Promise.all([
+    getQuoteId(author, content),
+    getDoc(reportDocRef),
+  ]);
 
   if (reportDoc.exists()) {
     const existingReport = reportDoc.data() as ReportedQuoteRecord;
@@ -132,6 +156,7 @@ export async function reportQuoteForUser(
       : [...reportedBy, email];
 
     await updateDoc(reportDocRef, {
+      ...(quoteId == null ? {} : { id: quoteId }),
       reportedBy: nextReportedBy,
       reportCount: nextReportedBy.length,
     });
@@ -139,6 +164,7 @@ export async function reportQuoteForUser(
   }
 
   await setDoc(reportDocRef, {
+    ...(quoteId == null ? {} : { id: quoteId }),
     content,
     author,
     reportedBy: [email],
