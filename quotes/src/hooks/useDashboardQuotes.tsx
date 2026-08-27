@@ -3,6 +3,7 @@ import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import QuoteCard from "../components/QuoteCard";
 import useUserProfile from "./useUserProfile";
+import { incrementQuoteLikes } from "../services/userProfileService";
 
 type QuoteRecord = {
   id: string;
@@ -20,6 +21,7 @@ function useDashboardQuotes() {
   const addQuote = useCallback(
     async (content: string, author: string) => {
       await saveQuote(content, author);
+      await incrementQuoteLikes(author, content);
     },
     [saveQuote],
   );

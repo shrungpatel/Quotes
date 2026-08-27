@@ -1,8 +1,10 @@
 import {
   collection,
   doc,
+  FieldPath,
   getDoc,
   getDocs,
+  increment,
   query,
   setDoc,
   updateDoc,
@@ -37,19 +39,39 @@ type QuoteRecord = {
   message?: string;
 };
 
-async function getQuoteId(author: string, content: string): Promise<string | null> {
-  const quoteDoc = await getDoc(doc(db, "Quotes", author));
+async function getQuoteField(
+  author: string,
+  content: string,
+): Promise<{ ref: DocumentReference; field: string; id: string } | null> {
+  const quoteRef = doc(db, "Quotes", author);
+  const quoteDoc = await getDoc(quoteRef);
 
   if (!quoteDoc.exists()) {
     return null;
   }
 
-  const quotes = Object.values(quoteDoc.data()) as QuoteRecord[];
-  const matchingQuote = quotes.find(
-    (quote) => quote?.message === content && typeof quote.id === "string",
-  );
+  const matchingQuote = Object.entries(quoteDoc.data()).find(([, quote]) => {
+    const quoteRecord = quote as QuoteRecord;
+    return quoteRecord?.message === content && typeof quoteRecord.id === "string";
+  });
 
-  return matchingQuote?.id ?? null;
+  return matchingQuote == null
+    ? null
+    : {
+        ref: quoteRef,
+        field: matchingQuote[0],
+        id: (matchingQuote[1] as QuoteRecord).id as string,
+      };
+}
+
+async function getQuoteId(author: string, content: string): Promise<string | null> {
+  const quote = await getQuoteField(author, content);
+
+  if (quote == null) {
+    return null;
+  }
+
+  return quote.id;
 }
 
 async function getUserProfileDocumentByEmail(
@@ -103,6 +125,19 @@ export async function saveQuoteForUser(
   await updateDoc(document.ref, {
     quotesID: Object.fromEntries(nextQuotes),
   });
+}
+
+export async function incrementQuoteLikes(
+  author: string,
+  content: string,
+): Promise<void> {
+  const quote = await getQuoteField(author, content);
+
+  if (quote == null) {
+    return;
+  }
+
+  await updateDoc(quote.ref, new FieldPath(quote.field, "likes"), increment(1));
 }
 
 export async function removeSavedQuoteForUser(
