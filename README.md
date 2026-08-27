@@ -11,3 +11,7 @@
 
 ## Backend
 ``node backend/index.js``
+
+## Both without opening another terminal
+
+``npm run dev``

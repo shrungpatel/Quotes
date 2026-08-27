@@ -1,5 +1,5 @@
 {
-  "name": "Quotes",
+  "name": "quotes",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -27,11 +27,15 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "backend": "cd backend && node index.js",
+    "frontend": "cd quotes && npm run dev",
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -49,5 +53,23 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
+  },
+  "description": "[Demo part 1](https://drive.google.com/file/d/1bxP5fZKy6AiqKCdMXf19foZaFaqNmlM6/view?usp=sharing) (login)",
+  "main": "index.js",
+  "devDependencies": {
+    "concurrently": "^10.0.5",
+    "jest": "^27.5.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shrungpatel/Quotes.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/shrungpatel/Quotes/issues"
+  },
+  "homepage": "https://github.com/shrungpatel/Quotes#readme"
 }
