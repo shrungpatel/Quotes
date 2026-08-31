@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import QuoteCard from "../components/QuoteCard";
@@ -19,10 +19,12 @@ const dashboardQuotesRequests = new Map<string, Promise<QuoteRecord[]>>();
 const authorQuotesCache = new Map<string, QuoteRecord[]>();
 const authorQuotesRequests = new Map<string, Promise<QuoteRecord[]>>();
 
-function getDashboardQuotes(query: string) {
-  const cachedQuotes = dashboardQuotesCache.get(query);
-  if (cachedQuotes) {
-    return Promise.resolve(cachedQuotes);
+function getDashboardQuotes(query: string, forceRefresh = false) {
+  if (!forceRefresh) {
+    const cachedQuotes = dashboardQuotesCache.get(query);
+    if (cachedQuotes) {
+      return Promise.resolve(cachedQuotes);
+    }
   }
 
   const existingRequest = dashboardQuotesRequests.get(query);
@@ -130,21 +132,69 @@ function useDashboardQuotes() {
   );
 
   const loadDashboardQuotes = useCallback(
-    async (query: string) => {
+    async (query: string, append = false) => {
       try {
-        const quotes = await getDashboardQuotes(query);
-        renderQuoteCards(quotes);
+        const quotes = await getDashboardQuotes(query, append);
+        if (append) {
+          setCards((currentCards) => [
+            ...currentCards,
+            ...quotes.map((quote, index) => (
+              <QuoteCard
+                key={`${quote.id}-${quote.message}-${currentCards.length + index}`}
+                content={quote.message}
+                author={quote.author}
+                onLike={addQuote}
+                onSearchAuthor={getAuthorQuotes}
+                onReportQuote={reportQuoteRequest}
+              />
+            )),
+          ]);
+        } else {
+          renderQuoteCards(quotes);
+        }
       } catch {
-        setCards([<p style={{ color: "red" }}>Error fetching quotes</p>]);
+        if (!append) {
+          setCards([<p style={{ color: "red" }}>Error fetching quotes</p>]);
+        }
       }
     },
-    [renderQuoteCards],
+    [addQuote, getAuthorQuotes, renderQuoteCards, reportQuoteRequest],
   );
+
+  const loadingMoreQuotes = useRef(false);
+
+  const loadMoreQuotes = useCallback(() => {
+    if (searchTerm || loadingMoreQuotes.current) {
+      return;
+    }
+
+    const documentHeight = document.documentElement.scrollHeight;
+    const scrollableHeight = documentHeight - window.innerHeight;
+    const scrollPercentage =
+      scrollableHeight > 0 ? window.scrollY / scrollableHeight : 0;
+
+    if (scrollPercentage < 0.85) {
+      return;
+    }
+
+    loadingMoreQuotes.current = true;
+    void loadDashboardQuotes(searchTerm, true).finally(() => {
+      loadingMoreQuotes.current = false;
+    });
+  }, [loadDashboardQuotes, searchTerm]);
 
   useEffect(() => {
     document.title = "Home";
     void loadDashboardQuotes(searchTerm);
   }, [loadDashboardQuotes, searchTerm]);
+
+  useEffect(() => {
+    window.addEventListener("scroll", loadMoreQuotes, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", loadMoreQuotes);
+    };
+  }, [loadMoreQuotes]);
 
   return { cards, getAuthorQuotes, searchTerm };
 }
