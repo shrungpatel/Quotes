@@ -12,6 +12,42 @@ type QuoteRecord = {
   message: string;
 };
 
+// Module-level caches survive Dashboard being unmounted when the user visits
+// another route, but are cleared when the page is refreshed.
+const dashboardQuotesCache = new Map<string, QuoteRecord[]>();
+const dashboardQuotesRequests = new Map<string, Promise<QuoteRecord[]>>();
+const authorQuotesCache = new Map<string, QuoteRecord[]>();
+const authorQuotesRequests = new Map<string, Promise<QuoteRecord[]>>();
+
+function getDashboardQuotes(query: string) {
+  const cachedQuotes = dashboardQuotesCache.get(query);
+  if (cachedQuotes) {
+    return Promise.resolve(cachedQuotes);
+  }
+
+  const existingRequest = dashboardQuotesRequests.get(query);
+  if (existingRequest) {
+    return existingRequest;
+  }
+
+  const endpoint =
+    query.length > 0
+      ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
+      : "http://localhost:5000/quotes";
+  const request = axios.get(endpoint).then((response) => {
+    const quotes = response.data as QuoteRecord[];
+    dashboardQuotesCache.set(query, quotes);
+    dashboardQuotesRequests.delete(query);
+    return quotes;
+  }).catch((error) => {
+    dashboardQuotesRequests.delete(query);
+    throw error;
+  });
+
+  dashboardQuotesRequests.set(query, request);
+  return request;
+}
+
 function useDashboardQuotes() {
   const { saveQuote, reportQuote } = useUserProfile();
   const [cards, setCards] = useState<JSX.Element[]>([]);
@@ -36,11 +72,25 @@ function useDashboardQuotes() {
   const getAuthorQuotes = useCallback(
     async (author: string) => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/authorQuotes?author=${encodeURIComponent(author)}`,
-        );
-
-        const quotes = response.data as QuoteRecord[];
+        let quotes = authorQuotesCache.get(author);
+        if (!quotes) {
+          let request = authorQuotesRequests.get(author);
+          if (!request) {
+            request = axios
+              .get(
+                `http://localhost:5000/authorQuotes?author=${encodeURIComponent(author)}`,
+              )
+              .then((response) => response.data as QuoteRecord[])
+              .catch((error) => {
+                authorQuotesRequests.delete(author);
+                throw error;
+              });
+            authorQuotesRequests.set(author, request);
+          }
+          quotes = await request;
+          authorQuotesCache.set(author, quotes);
+          authorQuotesRequests.delete(author);
+        }
 
         setCards(
           quotes.map((quote) => (
@@ -82,13 +132,9 @@ function useDashboardQuotes() {
   const loadDashboardQuotes = useCallback(
     async (query: string) => {
       try {
-        const endpoint =
-          query.length > 0
-            ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
-            : "http://localhost:5000/quotes";
-        const response = await axios.get(endpoint);
-        renderQuoteCards(response.data as QuoteRecord[]);
-      } catch (error) {
+        const quotes = await getDashboardQuotes(query);
+        renderQuoteCards(quotes);
+      } catch {
         setCards([<p style={{ color: "red" }}>Error fetching quotes</p>]);
       }
     },
