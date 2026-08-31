@@ -185,7 +185,14 @@ function useDashboardQuotes() {
 
   useEffect(() => {
     document.title = "Home";
-    void loadDashboardQuotes(searchTerm);
+
+    const loadTimeout = window.setTimeout(() => {
+      void loadDashboardQuotes(searchTerm);
+    }, 0);
+
+    return () => {
+      window.clearTimeout(loadTimeout);
+    };
   }, [loadDashboardQuotes, searchTerm]);
 
   useEffect(() => {
