@@ -1,9 +1,13 @@
+import { useEffect } from "react";
 import { Box, Button, Card, Grid } from "@mui/material";
 import "./App.css";
 import useSavedQuotes from "./hooks/useSavedQuotes";
 
 function Saved() {
-  document.title = "Saved";
+  useEffect(() => {
+    document.title = "Saved";
+  }, []);
+
   const { cards, loading, authorFilter, clearAuthorFilter } = useSavedQuotes();
   return loading ? (
       <h1 className="middle">Loading...</h1>

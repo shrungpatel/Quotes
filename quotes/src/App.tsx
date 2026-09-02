@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
 import {
@@ -23,10 +23,6 @@ function App() {
   const logOut = useLogout();
   const currentSearchTerm = new URLSearchParams(location.search).get("search") ?? "";
   const [searchValue, setSearchValue] = useState(currentSearchTerm);
-
-  useEffect(() => {
-    setSearchValue(currentSearchTerm);
-  }, [currentSearchTerm]);
 
   const goToDashboard = () => {
     navigate("/Dashboard");
@@ -69,6 +65,7 @@ function App() {
                   </Button>
                   {/* 1px solid #ccc for the search bar*/}
                   <input
+                    key={currentSearchTerm}
                     className="App-search"
                     type="search"
                     placeholder="Search here"
