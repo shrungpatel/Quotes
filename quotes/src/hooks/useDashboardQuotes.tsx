@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import QuoteCard from "../components/QuoteCard";
+import useAuthUser from "./useAuthUser";
 import useUserProfile from "./useUserProfile";
 import { incrementQuoteLikes } from "../services/userProfileService";
 
@@ -51,10 +52,36 @@ function getDashboardQuotes(query: string, forceRefresh = false) {
 }
 
 function useDashboardQuotes() {
-  const { saveQuote, reportQuote } = useUserProfile();
+  const { user, loading: authLoading } = useAuthUser();
+  const { profile, loading: profileLoading, saveQuote, reportQuote } = useUserProfile();
   const [cards, setCards] = useState<JSX.Element[]>([]);
   const [searchParams] = useSearchParams();
   const searchTerm = searchParams.get("search")?.trim() ?? "";
+
+  const filterUserQuotes = useCallback(
+    (quotes: QuoteRecord[]) => {
+      const userProfile = profile;
+
+      if (authLoading) {
+        return [];
+      }
+
+      if (user == null) {
+        return quotes;
+      }
+
+      if (profileLoading || userProfile == null) {
+        return [];
+      }
+
+      return quotes.filter(
+        (quote) =>
+          !(quote.message in userProfile.quotesID) &&
+          !(quote.message in userProfile.reportedQuotes),
+      );
+    },
+    [authLoading, profile, profileLoading, user],
+  );
 
   const addQuote = useCallback(
     async (content: string, author: string) => {
@@ -95,7 +122,7 @@ function useDashboardQuotes() {
         }
 
         setCards(
-          quotes.map((quote) => (
+          filterUserQuotes(quotes).map((quote) => (
             <QuoteCard
               key={quote.id}
               content={quote.message}
@@ -110,13 +137,13 @@ function useDashboardQuotes() {
         console.log(error);
       }
     },
-    [addQuote, reportQuoteRequest],
+    [addQuote, filterUserQuotes, reportQuoteRequest],
   );
 
   const renderQuoteCards = useCallback(
     (quotes: QuoteRecord[]) => {
       setCards(
-        quotes.map((quote) => (
+        filterUserQuotes(quotes).map((quote) => (
           <QuoteCard
             key={`${quote.id}-${quote.message}`}
             content={quote.message}
@@ -128,7 +155,7 @@ function useDashboardQuotes() {
         )),
       );
     },
-    [addQuote, getAuthorQuotes, reportQuoteRequest],
+    [addQuote, filterUserQuotes, getAuthorQuotes, reportQuoteRequest],
   );
 
   const loadDashboardQuotes = useCallback(
@@ -138,7 +165,7 @@ function useDashboardQuotes() {
         if (append) {
           setCards((currentCards) => [
             ...currentCards,
-            ...quotes.map((quote, index) => (
+            ...filterUserQuotes(quotes).map((quote, index) => (
               <QuoteCard
                 key={`${quote.id}-${quote.message}-${currentCards.length + index}`}
                 content={quote.message}
@@ -158,7 +185,7 @@ function useDashboardQuotes() {
         }
       }
     },
-    [addQuote, getAuthorQuotes, renderQuoteCards, reportQuoteRequest],
+    [addQuote, filterUserQuotes, getAuthorQuotes, renderQuoteCards, reportQuoteRequest],
   );
 
   const loadingMoreQuotes = useRef(false);
