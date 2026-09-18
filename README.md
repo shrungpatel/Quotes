@@ -12,6 +12,10 @@
 ## Backend
 ``node backend/index.js``
 
+The Explore map also requires the Python dependencies:
+
+``py -m pip install -r backend/requirements.txt``
+
 ## Both without opening another terminal
 
 ``npm run dev``

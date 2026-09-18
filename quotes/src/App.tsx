@@ -16,6 +16,7 @@ const ForgotPassword = lazy(() => import("./ForgotPassword"));
 const SignUp = lazy(() => import("./SignUp"));
 const Dashboard = lazy(() => import("./Dashboard"));
 const Saved = lazy(() => import("./Saved"));
+const Explore = lazy(() => import("./Explore"));
 
 function App() {
   const location = useLocation();
@@ -29,6 +30,9 @@ function App() {
   };
   const goToSaved = () => {
     navigate("/Saved");
+  };
+  const goToExplore = () => {
+    navigate("/Explore");
   };
 
   const hideHeader =
@@ -62,6 +66,14 @@ function App() {
                     sx={{ my: 2, color: "white", flexGrow: 1 }}
                   >
                     Saved
+                  </Button>
+                  <Button
+                    className="App-menu-bar-text"
+                    key={"explore"}
+                    onClick={goToExplore}
+                    sx={{ my: 2, color: "white", flexGrow: 1 }}
+                  >
+                    Explore
                   </Button>
                   {/* 1px solid #ccc for the search bar*/}
                   <input
@@ -117,6 +129,7 @@ function App() {
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/Dashboard" element={<Dashboard key={location.search} />} />
           <Route path="/Saved" element={<Saved key={location.search} />} />
+          <Route path="/Explore" element={<Explore />} />
         </Routes>
       </Suspense>
     </div>

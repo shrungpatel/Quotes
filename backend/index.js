@@ -3,6 +3,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const fs = require("fs");
 const path = require("path");
+const { spawn } = require("child_process");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -226,6 +227,49 @@ app.get("/searchQuotes", async (req, res) => {
         console.error(error);
         res.status(500).json({
             error: "Unable to search quotes.",
+        });
+    }
+});
+
+function generateAuthorsMap() {
+    return new Promise((resolve, reject) => {
+        const mapScript = path.join(__dirname, "map.py");
+        const outputPath = path.join(__dirname, "Outputs", "country_distribution_map.html");
+        const configuredPython = process.env.PYTHON_PATH;
+        const pythonCommand = configuredPython || (process.platform === "win32" ? "py" : "python3");
+        const pythonArguments = [mapScript, "--output", outputPath];
+
+        if (!configuredPython && process.platform === "win32") {
+            pythonArguments.unshift("-3");
+        }
+
+        const pythonProcess = spawn(pythonCommand, pythonArguments);
+        let errorOutput = "";
+
+        pythonProcess.stderr.on("data", (chunk) => {
+            errorOutput += chunk.toString();
+        });
+
+        pythonProcess.on("error", reject);
+        pythonProcess.on("close", (exitCode) => {
+            if (exitCode === 0) {
+                resolve(outputPath);
+                return;
+            }
+
+            reject(new Error(errorOutput || `Map generation exited with code ${exitCode}.`));
+        });
+    });
+}
+
+app.get("/authors-map", async (_req, res) => {
+    try {
+        const outputPath = await generateAuthorsMap();
+        res.sendFile(outputPath);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: "Unable to generate the author map.",
         });
     }
 });

@@ -133,3 +133,25 @@
 .App-search:hover {
   background-color:rgb(255, 255, 255)
 }
+
+.explore-page {
+  min-height: calc(100vh - 64px);
+  padding: 32px 24px 48px;
+}
+
+.explore-page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.explore-map-card {
+  overflow: hidden;
+  min-height: 620px;
+}
+
+.explore-map {
+  display: block;
+  width: 100%;
+  min-height: 620px;
+  border: 0;
+}
