@@ -10,7 +10,7 @@
 ``npm run dev``
 
 ## Backend
-``node backend/index.js``
+``node backend/server.js``
 
 The Explore map also requires the Python dependencies:
 

@@ -19,9 +19,12 @@
 .env.test.local
 .env.production.local
 serviceAccountKey.json
+serivceAccountKeyOld.json
 /backend/__pycache__/
 /backend/Outputs/
 
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+node_modules/.bin/html-minifier-terser
+backend/serviceAccountKeyOld.json

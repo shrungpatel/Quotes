@@ -27,11 +27,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "backend": "cd backend && node index.js",
+    "backend": "cd backend && node server.js",
     "frontend": "cd quotes && npm run dev",
     "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "cd quotes && npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -55,7 +55,7 @@
     ]
   },
   "description": "[Demo part 1](https://drive.google.com/file/d/1bxP5fZKy6AiqKCdMXf19foZaFaqNmlM6/view?usp=sharing) (login)",
-  "main": "index.js",
+  "main": "server.js",
   "devDependencies": {
     "concurrently": "^10.0.5",
     "jest": "^27.5.1"
