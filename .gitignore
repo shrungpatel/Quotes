@@ -28,3 +28,6 @@ yarn-debug.log*
 yarn-error.log*
 node_modules/.bin/html-minifier-terser
 backend/serviceAccountKeyOld.json
+quotes/firestore.rules
+quotes/.firebaserc
+quotes/firebase.json

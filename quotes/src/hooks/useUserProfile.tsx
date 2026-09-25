@@ -9,7 +9,7 @@ import {
 } from "../services/userProfileService";
 
 function useUserProfile() {
-  const { email, loading: authLoading } = useAuthUser();
+  const { user, loading: authLoading } = useAuthUser();
   const [profile, setProfile] = useState<UserProfileRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -21,14 +21,14 @@ function useUserProfile() {
 
       setLoading(true);
 
-      if (email == null) {
+      if (user == null) {
         setProfile(null);
         setLoading(false);
         return;
       }
 
       try {
-        setProfile(await getUserProfileByEmail(email));
+        setProfile(await getUserProfileByEmail(user.uid));
       } catch (error) {
         console.log("Error loading user profile:", error);
         setProfile(null);
@@ -36,39 +36,39 @@ function useUserProfile() {
         setLoading(false);
       }
     })();
-  }, [authLoading, email]);
+  }, [authLoading, user]);
 
   const saveQuote = useCallback(
     async (content: string, author: string) => {
-      if (email == null) {
+      if (user == null) {
         return;
       }
 
-      await saveQuoteForUser(email, content, author);
+      await saveQuoteForUser(user.uid, content, author);
     },
-    [email],
+    [user],
   );
 
   const unlikeQuote = useCallback(
     async (content: string) => {
-      if (email == null) {
+      if (user == null) {
         return;
       }
 
-      await removeSavedQuoteForUser(email, content);
+      await removeSavedQuoteForUser(user.uid, content);
     },
-    [email],
+    [user],
   );
 
   const reportQuote = useCallback(
     async (content: string, author: string) => {
-      if (email == null) {
+      if (user == null) {
         return;
       }
 
-      await reportQuoteForUser(email, content, author);
+      await reportQuoteForUser(user.uid, content, author);
     },
-    [email],
+    [user],
   );
 
   return {

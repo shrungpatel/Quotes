@@ -1,14 +1,10 @@
 import {
-  collection,
   doc,
   FieldPath,
   getDoc,
-  getDocs,
   increment,
-  query,
   setDoc,
   updateDoc,
-  where,
   type DocumentReference,
 } from "firebase/firestore";
 import { db } from "../Firebase";
@@ -74,23 +70,22 @@ async function getQuoteId(author: string, content: string): Promise<string | nul
   return quote.id;
 }
 
-async function getUserProfileDocumentByEmail(
-  email: string,
+async function getUserProfileDocumentByUid(
+  uid: string,
 ): Promise<UserProfileDocument | null> {
-  const q = query(collection(db, "Users"), where("email", "==", email));
-  const snapshot = await getDocs(q);
-  const doc = snapshot.docs[0];
+  const profileRef = doc(db, "Users", uid);
+  const profileDoc = await getDoc(profileRef);
 
-  if (doc == null) {
+  if (!profileDoc.exists()) {
     return null;
   }
 
-  const data = doc.data() as Omit<UserProfileRecord, "quotesID"> & {
+  const data = profileDoc.data() as Omit<UserProfileRecord, "quotesID"> & {
     quotesID?: Record<string, string>;
   };
 
   return {
-    ref: doc.ref,
+    ref: profileDoc.ref,
     profile: {
       uid: data.uid,
       email: data.email,
@@ -102,18 +97,18 @@ async function getUserProfileDocumentByEmail(
 }
 
 export async function getUserProfileByEmail(
-  email: string,
+  uid: string,
 ): Promise<UserProfileRecord | null> {
-  const document = await getUserProfileDocumentByEmail(email);
+  const document = await getUserProfileDocumentByUid(uid);
   return document?.profile ?? null;
 }
 
 export async function saveQuoteForUser(
-  email: string,
+  uid: string,
   content: string,
   author: string,
 ): Promise<void> {
-  const document = await getUserProfileDocumentByEmail(email);
+  const document = await getUserProfileDocumentByUid(uid);
 
   if (document == null) {
     return;
@@ -141,10 +136,10 @@ export async function incrementQuoteLikes(
 }
 
 export async function removeSavedQuoteForUser(
-  email: string,
+  uid: string,
   content: string,
 ): Promise<void> {
-  const document = await getUserProfileDocumentByEmail(email);
+  const document = await getUserProfileDocumentByUid(uid);
 
   if (document == null) {
     return;
@@ -159,11 +154,11 @@ export async function removeSavedQuoteForUser(
 }
 
 export async function reportQuoteForUser(
-  email: string,
+  uid: string,
   content: string,
   author: string,
 ): Promise<void> {
-  const document = await getUserProfileDocumentByEmail(email);
+  const document = await getUserProfileDocumentByUid(uid);
 
   if (document == null) {
     return;
@@ -186,9 +181,9 @@ export async function reportQuoteForUser(
   if (reportDoc.exists()) {
     const existingReport = reportDoc.data() as ReportedQuoteRecord;
     const reportedBy = existingReport.reportedBy ?? [];
-    const nextReportedBy = reportedBy.includes(email)
+    const nextReportedBy = reportedBy.includes(uid)
       ? reportedBy
-      : [...reportedBy, email];
+      : [...reportedBy, uid];
 
     await updateDoc(reportDocRef, {
       ...(quoteId == null ? {} : { id: quoteId }),
@@ -202,7 +197,7 @@ export async function reportQuoteForUser(
     ...(quoteId == null ? {} : { id: quoteId }),
     content,
     author,
-    reportedBy: [email],
+    reportedBy: [uid],
     reportCount: 1,
   });
 }
@@ -212,7 +207,7 @@ export async function createUserProfile(
   email: string,
   name: string,
 ): Promise<void> {
-  await setDoc(doc(db, "Users", email), {
+  await setDoc(doc(db, "Users", uid), {
     uid,
     email,
     name,
