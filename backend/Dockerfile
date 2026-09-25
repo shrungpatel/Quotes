@@ -1,26 +1,28 @@
-# Use a lightweight Python base image
 FROM python:3.11-slim
 
-# Install Node.js runtime
 RUN apt-get update && apt-get install -y curl && \
     curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
+    apt-get install -y --no-install-recommends nodejs && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Install Python requirements
-COPY requirements.txt .
+COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Node dependencies
-COPY package*.json ./
-RUN npm ci --only=production
+RUN npm init -y && \
+    npm install --omit=dev \
+        express@4.21.2 \
+        cors@2.8.5 \
+        firebase-admin@13.4.0
 
-# Copy application files
-COPY . .
+COPY server.js map.py serviceAccountKey.json ./
 
-# Expose server port (Cloud Run sets PORT automatically)
-EXPOSE 5000
+RUN mkdir -p Outputs && \
+    useradd --create-home --shell /usr/sbin/nologin appuser && \
+    chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8080
 
 CMD ["node", "server.js"]
