@@ -5,6 +5,7 @@ import QuoteCard from "../components/QuoteCard";
 import useAuthUser from "./useAuthUser";
 import useUserProfile from "./useUserProfile";
 import { incrementQuoteLikes } from "../services/userProfileService";
+import { backendUrl } from "../config";
 
 type QuoteRecord = {
   id: string;
@@ -35,8 +36,8 @@ function getDashboardQuotes(query: string, forceRefresh = false) {
 
   const endpoint =
     query.length > 0
-      ? `http://localhost:5000/searchQuotes?search=${encodeURIComponent(query)}`
-      : "http://localhost:5000/quotes";
+      ? `${backendUrl}/searchQuotes?search=${encodeURIComponent(query)}`
+      : `${backendUrl}/quotes`;
   const request = axios.get(endpoint).then((response) => {
     const quotes = response.data as QuoteRecord[];
     dashboardQuotesCache.set(query, quotes);
@@ -107,7 +108,7 @@ function useDashboardQuotes() {
           if (!request) {
             request = axios
               .get(
-                `http://localhost:5000/authorQuotes?author=${encodeURIComponent(author)}`,
+                `${backendUrl}/authorQuotes?author=${encodeURIComponent(author)}`,
               )
               .then((response) => response.data as QuoteRecord[])
               .catch((error) => {

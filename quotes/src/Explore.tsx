@@ -1,8 +1,7 @@
 import { useEffect } from "react";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import "./App.css";
-
-const backendUrl = import.meta.env.VITE_BACKEND_URL ?? "http://localhost:5000";
+import { backendUrl } from "./config";
 
 function Explore() {
   useEffect(() => {

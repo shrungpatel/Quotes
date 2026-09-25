@@ -3,6 +3,7 @@ import "./App.css";
 import { Button, Box } from "@mui/material/";
 import { Container, Stack, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { backendUrl } from "./config";
 
 function ForgotPassword() {
   const navigate = useNavigate();
@@ -28,7 +29,7 @@ function ForgotPassword() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:5000/forgotPassword", {
+      const response = await fetch(`${backendUrl}/forgotPassword`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
