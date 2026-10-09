@@ -1,5 +1,7 @@
 # Scroll and save your favorite quotes!
 
+Deployed: https://quotesdb-ad2ff.web.app/
+
 [Demo part 1](https://drive.google.com/file/d/1bxP5fZKy6AiqKCdMXf19foZaFaqNmlM6/view?usp=sharing) (login)
 
 [Demo part 2](https://drive.google.com/file/d/10qdoN6lfWt6FMA83LLMt-MGnotXg6VIh/view?usp=sharing) (dashboard and saved)
@@ -19,3 +21,6 @@ The Explore map also requires the Python dependencies:
 ## Both without opening another terminal
 
 ``npm run dev``
+
+
+Note: the necessary API keys to access the database are private so you will not be able to run the full application locally.
